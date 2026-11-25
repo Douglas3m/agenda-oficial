@@ -4,7 +4,7 @@ chcp 65001 > nul
 echo.
 echo ========================================================
 echo    AGENDA OFICIAL PC - CRÔNICA ECLESIÁSTICA & PATRIMÔNIO
-echo    Versão 1.1.5 • Desktop Widescreen Edition
+echo    Versão 1.1.7 • Desktop Widescreen Edition
 echo ========================================================
 echo.
 echo Iniciando servidor local na porta 8181...

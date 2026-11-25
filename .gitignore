@@ -20,3 +20,11 @@ $RECYCLE.BIN/
 .idea/
 *.swp
 *.bak
+
+# PyInstaller / Build Artifacts
+build/
+dist/
+*.spec
+__pycache__/
+*.pyc
+agenda_pc/*.exe

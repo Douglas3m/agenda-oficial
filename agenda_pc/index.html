@@ -867,7 +867,7 @@
             </div>
           </div>
 
-          <!-- Tipo de Documento: Livro de Tombo (Patrimônio) vs Ata de Solenidades (Agenda) -->
+          <!-- Tipo de Documento: Agenda vs Patrimônio -->
           <div class="flex flex-col gap-1.5">
             <label class="text-[10px] font-bold uppercase tracking-wider text-[#a89f91]">Tipo de Documento Oficial</label>
             <div class="grid grid-cols-2 gap-2">
@@ -877,7 +877,7 @@
               </button>
               <button onclick="ReportController.setDocType('agenda')" id="btn-doctype-agenda" class="py-2.5 px-3 rounded-xl bg-[#1a1714] text-[#a89f91] border border-[#d4af37]/15 text-xs flex items-center justify-center gap-2 hover:text-[#e9e1dc] transition-all">
                 <span class="material-symbols-outlined text-sm">event</span>
-                <span>Agenda / Cultos</span>
+                <span>Agenda</span>
               </button>
             </div>
           </div>
@@ -2624,11 +2624,13 @@
 
         const congObj = AppState.congregations.find(c => c.id === sede);
         if (sedeLabel) sedeLabel.textContent = congObj ? congObj.nome : 'Geral (Todas as Sedes)';
+        const protoEl = document.getElementById('report-sheet-protocolo');
 
         if (this.docType === 'patrimonio') {
           // Relatório de Patrimônio (Título estritamente 'Patrimônio' conforme requerido)
           if (titleEl) titleEl.textContent = 'PATRIMÔNIO';
           if (subtitleEl) subtitleEl.textContent = 'Rol Notarial de Custódias, Vasos Sagrados, Mobiliário e Alfaias';
+          if (protoEl) protoEl.textContent = 'PATRIMÔNIO • VOL. VIII';
 
           let list = [...AppState.patrimonio];
           if (sede !== 'ALL') list = list.filter(p => p.congregaçãoId === sede);
@@ -2668,9 +2670,10 @@
           }
 
         } else {
-          // Relatório da Agenda de Cultos
-          if (titleEl) titleEl.textContent = 'ATA GERAL DE SOLENIDADES & CULTOS';
+          // Relatório da Agenda (Título estritamente 'Agenda' conforme requerido)
+          if (titleEl) titleEl.textContent = 'AGENDA';
           if (subtitleEl) subtitleEl.textContent = 'Ordo Liturgicus Diocesano • Calendário Cronológico de Atas';
+          if (protoEl) protoEl.textContent = 'AGENDA OFICIAL';
 
           let list = [...AppState.events].sort((a, b) => (a.dataInicio || '').localeCompare(b.dataInicio || ''));
           if (sede !== 'ALL') list = list.filter(e => e.congregaçãoId === sede);

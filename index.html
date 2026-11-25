@@ -1331,11 +1331,11 @@
         </button>
       </div>
 
-      <!-- Seletor de Tipo de Documento Oficial A4 (Ata de Solenidades vs Livro de Tombo) -->
+      <!-- Seletor de Tipo de Documento Oficial A4 (Agenda vs Patrimônio) -->
       <div class="no-print flex p-1 rounded-xl bg-amber-500/10 border border-amber-500/25 text-xs">
         <button id="export-tab-solenidades" onclick="PatrimonioController.switchExportTab('solenidades')" class="flex-1 py-2 rounded-lg font-bold text-center transition-all flex items-center justify-center space-x-1.5 bg-amber-500/30 text-amber-400 shadow-sm">
           <span class="material-symbols-outlined text-base">event_note</span>
-          <span>Ata de Solenidades (Agenda)</span>
+          <span>Agenda</span>
         </button>
         <button id="export-tab-patrimonio" onclick="PatrimonioController.switchExportTab('patrimonio')" class="flex-1 py-2 rounded-lg font-medium text-center transition-all opacity-70 hover:opacity-100 flex items-center justify-center space-x-1.5">
           <span class="material-symbols-outlined text-base">inventory_2</span>
@@ -1410,7 +1410,7 @@
                   REPÚBLICA ECLESIÁSTICA • CONSELHO MINISTERIAL
                 </span>
                 <h1 class="font-serif text-xl sm:text-2xl font-bold tracking-wider uppercase text-amber-600 dark:text-amber-400 leading-tight">
-                  AGENDA LITÚRGICA OFICIAL & ATAS
+                  AGENDA
                 </h1>
                 <span class="text-[11px] uppercase tracking-widest opacity-80 font-serif block">
                   Acervo Ministerial de Solenidades, Cultos & Convocatórias Sagradas
@@ -1423,7 +1423,7 @@
                   A4 Paisagem (297mm)
                 </span>
                 <span class="text-[9px] font-mono uppercase bg-stone-100 dark:bg-stone-800 px-1.5 py-0.5 rounded border border-stone-300 dark:border-amber-500/30 inline-block font-bold">
-                  LIVRO OFICIAL
+                  AGENDA
                 </span>
               </div>
               <div class="text-[10px] opacity-70 pt-1" id="print-current-date">

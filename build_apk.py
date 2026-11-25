@@ -16,7 +16,7 @@ APKSIGNER = os.path.join(BUILD_TOOLS_DIR, "apksigner.bat")
 ROOT_DIR = r"D:\agenda_app"
 BUILD_DIR = os.path.join(ROOT_DIR, "android_build")
 OUTPUT_DIR = os.path.join(ROOT_DIR, "releases")
-APK_NAME = "Agenda-v1.1.5.apk"
+APK_NAME = "Agenda-v1.1.6.apk"
 KEYSTORE = os.path.join(ROOT_DIR, "agenda_release.keystore")
 KEYSTORE_PASS = "agenda2026"
 KEY_ALIAS = "agenda_key"
@@ -83,15 +83,23 @@ def create_manifest():
     manifest_content = """<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.agendaoficial.app"
-    android:versionCode="10105"
-    android:versionName="1.1.5">
+    android:versionCode="10106"
+    android:versionName="1.1.6">
 
     <uses-sdk
         android:minSdkVersion="21"
         android:targetSdkVersion="34" />
 
+    <!-- Conectividade -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Câmera Nativa para Fotos de Patrimônio e Eventos -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+
+    <!-- Armazenamento & Galeria -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
@@ -116,6 +124,17 @@ def create_manifest():
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Provider Seguro para Compartilhamento de Fotos da Câmera -->
+        <provider
+            android:name=".AppFileProvider"
+            android:authorities="br.com.agendaoficial.app.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
     </application>
 </manifest>
@@ -153,9 +172,96 @@ def create_manifest():
         f.write(file_paths)
 
 def create_java_source():
-    # Note: we avoid external androidx dependencies so standard javac against android.jar compiles directly!
-    # If FileProvider is needed, we can implement a simple custom FileProvider extending android.content.ContentProvider,
-    # or use standard Intent.ACTION_SEND with File or MediaStore / Cache.
+    # 1. AppFileProvider.java (ContentProvider nativo sem dependência externa)
+    file_provider_code = """package br.com.agendaoficial.app;
+
+import android.content.ContentProvider;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.MatrixCursor;
+import android.net.Uri;
+import android.os.ParcelFileDescriptor;
+import android.provider.OpenableColumns;
+import java.io.File;
+import java.io.FileNotFoundException;
+
+public class AppFileProvider extends ContentProvider {
+    public static final String AUTHORITY = "br.com.agendaoficial.app.fileprovider";
+
+    public static Uri getUriForFile(File file) {
+        return Uri.parse("content://" + AUTHORITY + "/" + file.getName());
+    }
+
+    @Override
+    public boolean onCreate() {
+        return true;
+    }
+
+    @Override
+    public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
+        File cacheDir = getContext() != null ? getContext().getCacheDir() : null;
+        if (cacheDir == null) {
+            throw new FileNotFoundException("Diretório de cache indisponível");
+        }
+        File file = new File(cacheDir, uri.getLastPathSegment());
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (Exception e) {
+                throw new FileNotFoundException("Erro ao criar arquivo: " + e.getMessage());
+            }
+        }
+        int modeFlag = ParcelFileDescriptor.MODE_READ_WRITE;
+        if ("r".equals(mode)) {
+            modeFlag = ParcelFileDescriptor.MODE_READ_ONLY;
+        }
+        return ParcelFileDescriptor.open(file, modeFlag);
+    }
+
+    @Override
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        File cacheDir = getContext() != null ? getContext().getCacheDir() : null;
+        if (cacheDir == null) return null;
+        File file = new File(cacheDir, uri.getLastPathSegment());
+        MatrixCursor cursor = new MatrixCursor(new String[]{OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE});
+        cursor.addRow(new Object[]{file.getName(), file.length()});
+        return cursor;
+    }
+
+    @Override
+    public String getType(Uri uri) {
+        String name = uri.getLastPathSegment();
+        if (name != null && name.toLowerCase().endsWith(".png")) {
+            return "image/png";
+        }
+        if (name != null && name.toLowerCase().endsWith(".pdf")) {
+            return "application/pdf";
+        }
+        return "image/jpeg";
+    }
+
+    @Override
+    public Uri insert(Uri uri, ContentValues values) { return null; }
+
+    @Override
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+        File cacheDir = getContext() != null ? getContext().getCacheDir() : null;
+        if (cacheDir == null) return 0;
+        File file = new File(cacheDir, uri.getLastPathSegment());
+        if (file.exists()) {
+            return file.delete() ? 1 : 0;
+        }
+        return 0;
+    }
+
+    @Override
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) { return 0; }
+}
+"""
+    with open(os.path.join(BUILD_DIR, "src", "br", "com", "agendaoficial", "app", "AppFileProvider.java"), "w", encoding="utf-8") as f:
+        f.write(file_provider_code)
+
+    # 2. MainActivity.java (WebView com Câmera, Seletor Chooser e PrintManager A4 / PDF)
     java_content = """package br.com.agendaoficial.app;
 
 import android.app.Activity;
@@ -175,8 +281,15 @@ import android.webkit.WebViewClient;
 import android.webkit.JavascriptInterface;
 import android.net.Uri;
 import android.content.Intent;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.provider.MediaStore;
+import android.print.PrintManager;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintAttributes;
 import android.graphics.Color;
 import android.widget.Toast;
+import android.Manifest;
 import java.io.InputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -186,7 +299,9 @@ import java.util.Map;
 public class MainActivity extends Activity {
     private WebView mWebView;
     private ValueCallback<Uri[]> mFilePathCallback;
+    private Uri mCameraPhotoUri;
     private final static int FILECHOOSER_RESULTCODE = 101;
+    private final static int CAMERA_PERMISSION_CODE = 202;
 
     private static final Map<String, String> MIME_TYPES = new HashMap<String, String>() {{
         put("html", "text/html");
@@ -234,31 +349,73 @@ public class MainActivity extends Activity {
         settings.setSupportZoom(true);
         settings.setCacheMode(WebSettings.LOAD_DEFAULT);
 
-        // WebApp Bridge for native mobile sharing & backup export
+        // WebApp Bridge para câmera, impressão nativa, backup e compartilhamento
         mWebView.addJavascriptInterface(new WebAppInterface(), "AndroidBridge");
 
+        // WebChromeClient avançado com suporte a Câmera + Galeria
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
                                              FileChooserParams fileChooserParams) {
                 if (mFilePathCallback != null) {
                     mFilePathCallback.onReceiveValue(null);
+                    mFilePathCallback = null;
                 }
                 mFilePathCallback = filePathCallback;
 
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                // Solicita permissão de câmera se necessário em tempo de execução
+                checkAndRequestCameraPermission();
+
+                boolean isCaptureExplicit = false;
+                if (fileChooserParams != null && fileChooserParams.isCaptureEnabled()) {
+                    isCaptureExplicit = true;
+                }
+
+                // 1. Prepara Intent da Câmera Nativa do Android
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                try {
+                    File photoFile = new File(getCacheDir(), "foto_patrimonio_" + System.currentTimeMillis() + ".jpg");
+                    mCameraPhotoUri = AppFileProvider.getUriForFile(photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCameraPhotoUri);
+                    takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                } catch (Exception e) {
+                    mCameraPhotoUri = null;
+                }
+
+                // Se capture="camera" foi especificado no HTML, abre direto a câmera
+                if (isCaptureExplicit && mCameraPhotoUri != null && takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    try {
+                        startActivityForResult(takePictureIntent, FILECHOOSER_RESULTCODE);
+                        return true;
+                    } catch (Exception e) {}
+                }
+
+                // 2. Prepara Intent de Seleção de Galeria / Documentos
+                Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                String mimeType = "image/*";
                 if (fileChooserParams != null && fileChooserParams.getAcceptTypes() != null && fileChooserParams.getAcceptTypes().length > 0 && !fileChooserParams.getAcceptTypes()[0].isEmpty()) {
-                    intent.setType(fileChooserParams.getAcceptTypes()[0]);
-                } else {
-                    intent.setType("*/*");
+                    mimeType = fileChooserParams.getAcceptTypes()[0];
+                }
+                contentSelectionIntent.setType(mimeType);
+
+                // 3. Monta o Seletor Unificado (Tirar Foto com a Câmera OU Escolher da Galeria)
+                Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+                chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
+                chooserIntent.putExtra(Intent.EXTRA_TITLE, "Capturar com Câmera ou Selecionar Foto");
+
+                if (mCameraPhotoUri != null && takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePictureIntent});
                 }
 
                 try {
-                    startActivityForResult(Intent.createChooser(intent, "Selecionar Arquivo ou Foto"), FILECHOOSER_RESULTCODE);
+                    startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE);
                     return true;
                 } catch (Exception e) {
-                    mFilePathCallback = null;
+                    if (mFilePathCallback != null) {
+                        mFilePathCallback.onReceiveValue(null);
+                        mFilePathCallback = null;
+                    }
                     return false;
                 }
             }
@@ -274,16 +431,16 @@ public class MainActivity extends Activity {
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 Uri uri = request.getUrl();
                 String scheme = uri.getScheme();
-                if ("agenda".equals(uri.getHost()) || "localhost".equals(uri.getHost()) || "file".equals(scheme)) {
-                    return false;
+                if ("tel".equals(scheme) || "mailto".equals(scheme) || "whatsapp".equals(scheme)) {
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                        return true;
+                    } catch (Exception e) {
+                        return false;
+                    }
                 }
-                try {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    startActivity(intent);
-                    return true;
-                } catch (Exception e) {
-                    return false;
-                }
+                return false;
             }
 
             @Override
@@ -323,19 +480,50 @@ public class MainActivity extends Activity {
         mWebView.loadUrl("https://agenda.local/index.html");
     }
 
+    private void checkAndRequestCameraPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permissão de câmera concedida!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Permissão de câmera necessária para capturar fotos do acervo.", Toast.LENGTH_LONG).show();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == FILECHOOSER_RESULTCODE) {
             if (mFilePathCallback != null) {
                 Uri[] results = null;
-                if (resultCode == Activity.RESULT_OK && data != null) {
-                    if (data.getData() != null) {
-                        results = new Uri[]{data.getData()};
-                    } else if (data.getClipData() != null) {
-                        int count = data.getClipData().getItemCount();
-                        results = new Uri[count];
-                        for (int i = 0; i < count; i++) {
-                            results[i] = data.getClipData().getItemAt(i).getUri();
+                if (resultCode == Activity.RESULT_OK) {
+                    // 1. Caso a foto tenha sido tirada pela CÂMERA
+                    if (data == null || data.getData() == null) {
+                        if (mCameraPhotoUri != null) {
+                            File photoFile = new File(getCacheDir(), mCameraPhotoUri.getLastPathSegment());
+                            if (photoFile.exists() && photoFile.length() > 0) {
+                                results = new Uri[]{mCameraPhotoUri};
+                            }
+                        }
+                    } else {
+                        // 2. Caso a foto venha da GALERIA ou gerenciador de arquivos
+                        if (data.getData() != null) {
+                            results = new Uri[]{data.getData()};
+                        } else if (data.getClipData() != null) {
+                            int count = data.getClipData().getItemCount();
+                            results = new Uri[count];
+                            for (int i = 0; i < count; i++) {
+                                results[i] = data.getClipData().getItemAt(i).getUri();
+                            }
                         }
                     }
                 }
@@ -382,7 +570,41 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public String getAppVersion() {
-            return "1.1.5";
+            return "1.1.6";
+        }
+
+        @JavascriptInterface
+        public void requestCamera() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    checkAndRequestCameraPermission();
+                }
+            });
+        }
+
+        @JavascriptInterface
+        public void printDocument(final String documentName) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
+                        String jobName = (documentName != null && !documentName.trim().isEmpty())
+                                ? documentName.trim()
+                                : "Relatorio_Agenda_Oficial_A4";
+
+                        PrintDocumentAdapter printAdapter = mWebView.createPrintDocumentAdapter(jobName);
+                        PrintAttributes.Builder builder = new PrintAttributes.Builder();
+                        builder.setMediaSize(PrintAttributes.MediaSize.ISO_A4);
+                        builder.setColorMode(PrintAttributes.COLOR_MODE_COLOR);
+
+                        printManager.print(jobName, printAdapter, builder.build());
+                    } catch (Exception e) {
+                        Toast.makeText(MainActivity.this, "Erro ao abrir spooler de impressão/PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
 
         @JavascriptInterface
@@ -516,7 +738,7 @@ def build_apk():
     print(f"Caminho: {final_apk}")
     print(f"Cópia Raiz: {root_apk}")
     print(f"Tamanho: {size_mb:.2f} MB")
-    print(f"Versão: 1.1.5 (Agenda vs 1.1.5)")
+    print(f"Versão: 1.1.6 (Agenda vs 1.1.6)")
     print("="*60)
 
 if __name__ == "__main__":

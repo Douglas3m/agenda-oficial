@@ -14,14 +14,18 @@ def main():
         print("[ERRO] Token do GitHub nao encontrado.")
         sys.exit(1)
 
-    with open(r'D:\agenda_app\RELEASE_NOTES_v1.1.5.md', 'r', encoding='utf-8') as f:
+    tag = 'v1.1.6'
+    release_name = 'Agenda vs 1.1.6'
+    notes_file = r'D:\agenda_app\RELEASE_NOTES_v1.1.6.md'
+
+    with open(notes_file, 'r', encoding='utf-8') as f:
         release_notes = f.read()
 
     repo = 'Douglas3m/agenda-oficial'
-    print(f">> Verificando se release v1.1.5 ja existe em {repo}...")
+    print(f">> Verificando se release {tag} ja existe em {repo}...")
 
     # Check if release already exists
-    req_check = urllib.request.Request(f'https://api.github.com/repos/{repo}/releases/tags/v1.1.5', headers={
+    req_check = urllib.request.Request(f'https://api.github.com/repos/{repo}/releases/tags/{tag}', headers={
         'Authorization': f'token {token}',
         'User-Agent': 'AgendaOficialBuild',
         'Accept': 'application/vnd.github.v3+json'
@@ -30,14 +34,14 @@ def main():
     try:
         with urllib.request.urlopen(req_check) as resp:
             rel_data = json.loads(resp.read().decode())
-            print(f">> Release v1.1.5 ja existe! ID: {rel_data.get('id')}")
+            print(f">> Release {tag} ja existe! ID: {rel_data.get('id')}")
     except urllib.error.HTTPError as e:
         if e.code == 404:
-            print(">> Criando nova Release oficial v1.1.5...")
+            print(f">> Criando nova Release oficial {tag}...")
             release_payload = {
-                'tag_name': 'v1.1.5',
+                'tag_name': tag,
                 'target_commitish': 'main',
-                'name': 'Agenda vs 1.1.5',
+                'name': release_name,
                 'body': release_notes,
                 'draft': False,
                 'prerelease': False
@@ -59,9 +63,9 @@ def main():
     html_url = rel_data.get('html_url')
     print(f">> URL da Release: {html_url}")
 
-    apk_path = r'D:\agenda_app\releases\Agenda-v1.1.5.apk'
+    apk_path = rf'D:\agenda_app\releases\Agenda-{tag}.apk'
     apk_size = os.path.getsize(apk_path)
-    apk_name = 'Agenda-v1.1.5.apk'
+    apk_name = f'Agenda-{tag}.apk'
     print(f">> Fazendo upload do binario APK ({apk_size:,} bytes) para os assets da Release...")
 
     # Check existing assets to avoid duplication
@@ -97,7 +101,7 @@ def main():
         print(">> SUCESSO TOTAL NO UPLOAD DO APK!")
         print(f">> Repositorio: https://github.com/{repo}")
         print(f">> Release:     {html_url}")
-        print(f">> Tag:         v1.1.5 (Agenda vs 1.1.5)")
+        print(f">> Tag:         {tag} ({release_name})")
         print(f">> Download APK: {download_url}")
         print("=" * 70)
 

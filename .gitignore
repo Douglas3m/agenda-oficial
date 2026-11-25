@@ -1,0 +1,22 @@
+# Android Build Artifacts & Temporary Files
+android_build/
+*.keystore
+.temp/
+extracted/
+patrimonio_extracted/
+preview_*.png
+test_*.png
+stitch_*.zip
+
+# System & OS Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.bak

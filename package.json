@@ -1,0 +1,20 @@
+{
+  "name": "cronica-agenda-eclesiastica",
+  "version": "1.1.5",
+  "description": "Crônica & Agenda Eclesiástica - PWA e SPA Litúrgico Offline-First",
+  "scripts": {
+    "start": "python -m http.server 8181",
+    "dev": "npx serve -l 8181 .",
+    "serve": "python -m http.server 8181"
+  },
+  "keywords": [
+    "pwa",
+    "agenda",
+    "liturgica",
+    "offline-first",
+    "patrimonio",
+    "apk"
+  ],
+  "author": "",
+  "license": "ISC"
+}

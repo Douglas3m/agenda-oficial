@@ -78,6 +78,291 @@
     ::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.3); border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(212, 175, 55, 0.6); }
 
+    
+    /* ========================================================
+       SISTEMA DE TEMAS LITÚRGICOS REATIVOS (PC DESKTOP ENGINE)
+       ======================================================== */
+    :root {
+      --bg-app: #12100e;
+      --bg-sidebar: #161310;
+      --bg-header: rgba(22, 19, 16, 0.92);
+      --bg-card: #1a1714;
+      --bg-card-rgb: 26, 23, 20;
+      --bg-card-hover: #221f1c;
+      --bg-subtle: #221f1c;
+      --bg-input: #1a1714;
+      --border-theme: rgba(212, 175, 55, 0.22);
+      --border-strong: rgba(212, 175, 55, 0.5);
+      --primary: #d4af37;
+      --primary-light: #f2ca50;
+      --primary-hover: #f7dc78;
+      --primary-glow: rgba(212, 175, 55, 0.25);
+      --text-main: #e9e1dc;
+      --text-muted: #a89f91;
+      --text-gold: #f2ca50;
+      --badge-bg: rgba(212, 175, 55, 0.12);
+    }
+
+    /* 1. Nocturne Ouro (Padrão Escuro) */
+    html.theme-dark-nocturne, html.dark:not([class*="theme-"]) {
+      --bg-app: #12100e;
+      --bg-sidebar: #161310;
+      --bg-header: rgba(22, 19, 16, 0.92);
+      --bg-card: #1a1714;
+      --bg-card-rgb: 26, 23, 20;
+      --bg-card-hover: #221f1c;
+      --bg-subtle: #221f1c;
+      --bg-input: #1a1714;
+      --border-theme: rgba(212, 175, 55, 0.22);
+      --border-strong: rgba(212, 175, 55, 0.5);
+      --primary: #d4af37;
+      --primary-light: #f2ca50;
+      --primary-hover: #f7dc78;
+      --primary-glow: rgba(212, 175, 55, 0.25);
+      --text-main: #e9e1dc;
+      --text-muted: #a89f91;
+      --text-gold: #f2ca50;
+      --badge-bg: rgba(212, 175, 55, 0.12);
+    }
+
+    /* 2. Catedral Meia-Noite (Azul Sacral & Prata Celeste) */
+    html.theme-dark-midnight {
+      --bg-app: #090e17;
+      --bg-sidebar: #0d1527;
+      --bg-header: rgba(13, 21, 39, 0.92);
+      --bg-card: #111d35;
+      --bg-card-rgb: 17, 29, 53;
+      --bg-card-hover: #172747;
+      --bg-subtle: #192a4a;
+      --bg-input: #101c33;
+      --border-theme: rgba(56, 189, 248, 0.25);
+      --border-strong: rgba(56, 189, 248, 0.55);
+      --primary: #38bdf8;
+      --primary-light: #7dd3fc;
+      --primary-hover: #bae6fd;
+      --primary-glow: rgba(56, 189, 248, 0.3);
+      --text-main: #e6edf8;
+      --text-muted: #8ea3c4;
+      --text-gold: #38bdf8;
+      --badge-bg: rgba(56, 189, 248, 0.15);
+    }
+
+    /* 3. Basílica Imperial (Ametista Episcopal & Púrpura) */
+    html.theme-dark-purple {
+      --bg-app: #14091c;
+      --bg-sidebar: #1a0d24;
+      --bg-header: rgba(26, 13, 36, 0.92);
+      --bg-card: #231230;
+      --bg-card-rgb: 35, 18, 48;
+      --bg-card-hover: #2e1840;
+      --bg-subtle: #2d173e;
+      --bg-input: #20102d;
+      --border-theme: rgba(192, 132, 252, 0.25);
+      --border-strong: rgba(192, 132, 252, 0.55);
+      --primary: #c084fc;
+      --primary-light: #d8b4fe;
+      --primary-hover: #e9d5ff;
+      --primary-glow: rgba(192, 132, 252, 0.3);
+      --text-main: #f5eefa;
+      --text-muted: #aa95bc;
+      --text-gold: #c084fc;
+      --badge-bg: rgba(192, 132, 252, 0.15);
+    }
+
+    /* 4. Vinho Sacramental (Carmesim Litúrgico & Rubi) */
+    html.theme-dark-crimson {
+      --bg-app: #17080b;
+      --bg-sidebar: #220b10;
+      --bg-header: rgba(34, 11, 16, 0.92);
+      --bg-card: #2e0f16;
+      --bg-card-rgb: 46, 15, 22;
+      --bg-card-hover: #3d141e;
+      --bg-subtle: #3a131c;
+      --bg-input: #290d13;
+      --border-theme: rgba(251, 113, 133, 0.25);
+      --border-strong: rgba(251, 113, 133, 0.55);
+      --primary: #fb7185;
+      --primary-light: #fda4af;
+      --primary-hover: #fecdd3;
+      --primary-glow: rgba(251, 113, 133, 0.3);
+      --text-main: #fdf2f4;
+      --text-muted: #bda2a7;
+      --text-gold: #fb7185;
+      --badge-bg: rgba(251, 113, 133, 0.15);
+    }
+
+    /* 5. Papiro Litúrgico Claro (Pergaminho Marfim & Sépia) */
+    html.theme-light-vintage, html.light:not([class*="theme-"]) {
+      --bg-app: #f6efe0;
+      --bg-sidebar: #ede4d1;
+      --bg-header: rgba(237, 228, 209, 0.94);
+      --bg-card: #ffffff;
+      --bg-card-rgb: 255, 255, 255;
+      --bg-card-hover: #faf6ec;
+      --bg-subtle: #e4dac4;
+      --bg-input: #ffffff;
+      --border-theme: rgba(145, 106, 8, 0.25);
+      --border-strong: rgba(145, 106, 8, 0.55);
+      --primary: #916a08;
+      --primary-light: #7c5804;
+      --primary-hover: #5d4202;
+      --primary-glow: rgba(145, 106, 8, 0.2);
+      --text-main: #1f1b13;
+      --text-muted: #5e5545;
+      --text-gold: #916a08;
+      --badge-bg: rgba(145, 106, 8, 0.12);
+    }
+
+    /* 6. Alabastro Canônico Claro (Alabastro Alvo & Âmbar Sacro) */
+    html.theme-light-alabaster, html.theme-light-marble {
+      --bg-app: #f8fafc;
+      --bg-sidebar: #f1f5f9;
+      --bg-header: rgba(241, 245, 249, 0.94);
+      --bg-card: #ffffff;
+      --bg-card-rgb: 255, 255, 255;
+      --bg-card-hover: #f8fafc;
+      --bg-subtle: #e2e8f0;
+      --bg-input: #ffffff;
+      --border-theme: rgba(100, 116, 139, 0.25);
+      --border-strong: rgba(71, 85, 105, 0.55);
+      --primary: #d97706;
+      --primary-light: #b45309;
+      --primary-hover: #92400e;
+      --primary-glow: rgba(217, 119, 6, 0.2);
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-gold: #d97706;
+      --badge-bg: rgba(217, 119, 6, 0.12);
+    }
+
+    /* Aplicação universal e reativa das variáveis sobre os seletores */
+    body {
+      background-color: var(--bg-app) !important;
+      color: var(--text-main) !important;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    aside {
+      background-color: var(--bg-sidebar) !important;
+      border-color: var(--border-theme) !important;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    header {
+      background-color: var(--bg-header) !important;
+      border-color: var(--border-theme) !important;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    main {
+      background-color: var(--bg-app) !important;
+      transition: background-color 0.2s ease;
+    }
+
+    .glass-card, [class*="bg-[#1a1714]"] {
+      background-color: var(--bg-card) !important;
+      border-color: var(--border-theme) !important;
+    }
+
+    .glass-card-hover:hover {
+      background-color: var(--bg-card-hover) !important;
+      border-color: var(--border-strong) !important;
+    }
+
+    [class*="bg-[#221f1c]"], [class*="bg-[#2c2722]"], [class*="bg-[#1f1a14]"], [class*="bg-[#100e0b]"] {
+      background-color: var(--bg-subtle) !important;
+      border-color: var(--border-theme) !important;
+    }
+
+    [class*="hover:bg-[#221f1c]"]:hover, [class*="hover:bg-[#2c2722]"]:hover {
+      background-color: var(--bg-card-hover) !important;
+    }
+
+    input, select, textarea {
+      background-color: var(--bg-input) !important;
+      color: var(--text-main) !important;
+      border-color: var(--border-theme) !important;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary) !important;
+      box-shadow: 0 0 0 1px var(--primary), 0 0 12px var(--primary-glow) !important;
+    }
+
+    select option, select optgroup {
+      background-color: var(--bg-sidebar) !important;
+      color: var(--text-main) !important;
+    }
+
+    /* Modais */
+    .fixed.inset-0 .glass-card,
+    .fixed.inset-0 [class*="bg-[#161310]"],
+    .fixed.inset-0 [class*="bg-[#1a1714]"],
+    .fixed.inset-0 [class*="bg-[#221f1c]"] {
+      background-color: var(--bg-sidebar) !important;
+      border-color: var(--border-strong) !important;
+    }
+
+    /* Tipografia & Acentos */
+    [class*="text-[#e9e1dc]"], [class*="text-[#ece5d8]"], [class*="text-[#f4ecd8]"], h1, h2, h3, h4 {
+      color: var(--text-main) !important;
+    }
+
+    [class*="text-[#a89f91]"] {
+      color: var(--text-muted) !important;
+    }
+
+    [class*="text-[#f2ca50]"], [class*="text-[#d4af37]"], [class*="text-[#e4c285]"], [class*="text-[#f7dc78]"] {
+      color: var(--text-gold) !important;
+    }
+
+    [class*="border-[#d4af37]"], [class*="border-[#f2ca50]"] {
+      border-color: var(--border-theme) !important;
+    }
+
+    /* Botão Primário em Gradiente Dinâmico */
+    [class*="from-[#d4af37]"][class*="to-[#f2ca50]"] {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light)) !important;
+      color: #12100e !important;
+      box-shadow: 0 4px 16px var(--primary-glow) !important;
+    }
+
+    .active-nav-pill {
+      background: var(--bg-subtle) !important;
+      color: var(--text-gold) !important;
+      border-color: var(--border-strong) !important;
+      box-shadow: inset 0 0 12px var(--primary-glow) !important;
+    }
+
+    /* Exceção essencial: Folha A4 no Relatório sempre papel branco */
+    .sheet-a4-landscape, .sheet-a4-portrait, .sheet-a4-landscape *, .sheet-a4-portrait * {
+      background-color: #ffffff;
+      color: #111111;
+    }
+    .sheet-a4-landscape th, .sheet-a4-portrait th {
+      background-color: #f3f4f6 !important;
+      color: #111111 !important;
+    }
+    .sheet-a4-landscape td, .sheet-a4-portrait td {
+      color: #111111 !important;
+      border-color: #d1d5db !important;
+    }
+
+    /* Exceção essencial: Botões da Paleta Retrátil com cores originais */
+    .palette-theme-btn[data-theme="dark-nocturne"] { background-color: #12100e !important; color: #f2ca50 !important; border-color: rgba(212, 175, 55, 0.5) !important; }
+    .palette-theme-btn[data-theme="dark-midnight"] { background-color: #090e17 !important; color: #38bdf8 !important; border-color: rgba(56, 189, 248, 0.5) !important; }
+    .palette-theme-btn[data-theme="dark-purple"] { background-color: #14091c !important; color: #c084fc !important; border-color: rgba(192, 132, 252, 0.5) !important; }
+    .palette-theme-btn[data-theme="dark-crimson"] { background-color: #17080b !important; color: #fb7185 !important; border-color: rgba(251, 113, 133, 0.5) !important; }
+    .palette-theme-btn[data-theme="light-vintage"] { background-color: #fff9ee !important; color: #201b12 !important; border-color: rgba(145, 106, 8, 0.5) !important; }
+    .palette-theme-btn[data-theme="light-alabaster"] { background-color: #f8fafc !important; color: #0f172a !important; border-color: rgba(100, 116, 139, 0.5) !important; }
+
+    .palette-theme-btn.palette-btn-active {
+      outline: 2px solid var(--primary) !important;
+      box-shadow: 0 0 0 2px var(--primary), 0 0 10px var(--primary-glow) !important;
+      font-weight: 700 !important;
+      transform: scale(1.05);
+    }
+
     /* Efeitos de Vidro Líquido & Ouro */
     .glass-card {
       background: rgba(26, 23, 20, 0.88);
@@ -166,7 +451,7 @@
       <!-- Cabeçalho Litúrgico & Logomarca -->
       <div class="flex items-center gap-3 px-2">
         <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#2c2722] to-[#1a1714] border border-[#d4af37]/35 flex items-center justify-center shadow-[inset_0_0_12px_rgba(212,175,55,0.25)] shrink-0">
-          <img src="logo_vazado_gold.png" alt="Logo" class="w-7 h-7 object-contain" onerror="this.onerror=null; this.src='icon-192.png';" />
+          <img id="pc-app-logo" src="logo_vazado_gold.png" alt="Logo" class="w-7 h-7 object-contain" onerror="this.onerror=null; this.src='icon-192.png';" />
         </div>
         <div class="flex flex-col min-w-0">
           <span class="font-serif font-bold text-base text-[#f2ca50] tracking-wide leading-tight truncate">Agenda Oficial</span>
@@ -233,16 +518,16 @@
         <!-- Gaveta de temas condensada -->
         <div id="palette-dropdown" class="hidden pt-2 mt-2 border-t border-[#d4af37]/15 flex flex-col gap-2">
           <div class="grid grid-cols-3 gap-1.5 text-center text-[10px]">
-            <button onclick="ThemeController.select('dark-nocturne')" title="Nocturne Ouro" class="p-1 rounded bg-[#12100e] border border-[#d4af37]/50 text-[#f2ca50] hover:scale-105 transition-all">Ouro</button>
-            <button onclick="ThemeController.select('dark-midnight')" title="Catedral Meia-Noite" class="p-1 rounded bg-[#090e17] border border-sky-500/40 text-sky-400 hover:scale-105 transition-all">Azul</button>
-            <button onclick="ThemeController.select('dark-purple')" title="Basílica Imperial" class="p-1 rounded bg-[#150a1c] border border-purple-500/40 text-purple-300 hover:scale-105 transition-all">Roxo</button>
-            <button onclick="ThemeController.select('dark-crimson')" title="Vinho Sacramental" class="p-1 rounded bg-[#1c0a0e] border border-rose-500/40 text-rose-300 hover:scale-105 transition-all">Vinho</button>
-            <button onclick="ThemeController.select('light-vintage')" title="Papiro Litúrgico Claro" class="p-1 rounded bg-[#fff9ee] border border-amber-600/40 text-stone-800 hover:scale-105 transition-all">Papiro</button>
-            <button onclick="ThemeController.select('light-alabaster')" title="Alabastro Canônico" class="p-1 rounded bg-[#f5f5f4] border border-stone-400/50 text-stone-900 hover:scale-105 transition-all">Claro</button>
+            <button type="button" data-theme="dark-nocturne" onclick="ThemeController.select('dark-nocturne')" title="Nocturne Ouro (Carvão Litúrgico & Ouro Real)" class="palette-theme-btn p-1.5 rounded-lg bg-[#12100e] border border-[#d4af37]/50 text-[#f2ca50] hover:scale-105 transition-all">Ouro</button>
+            <button type="button" data-theme="dark-midnight" onclick="ThemeController.select('dark-midnight')" title="Catedral Meia-Noite (Azul Sacral & Prata Celeste)" class="palette-theme-btn p-1.5 rounded-lg bg-[#090e17] border border-sky-500/40 text-sky-400 hover:scale-105 transition-all">Azul</button>
+            <button type="button" data-theme="dark-purple" onclick="ThemeController.select('dark-purple')" title="Basílica Imperial (Ametista Episcopal & Púrpura)" class="palette-theme-btn p-1.5 rounded-lg bg-[#150a1c] border border-purple-500/40 text-purple-300 hover:scale-105 transition-all">Roxo</button>
+            <button type="button" data-theme="dark-crimson" onclick="ThemeController.select('dark-crimson')" title="Vinho Sacramental (Carmesim Litúrgico & Rubi)" class="palette-theme-btn p-1.5 rounded-lg bg-[#1c0a0e] border border-rose-500/40 text-rose-300 hover:scale-105 transition-all">Vinho</button>
+            <button type="button" data-theme="light-vintage" onclick="ThemeController.select('light-vintage')" title="Papiro Litúrgico Claro (Pergaminho Marfim & Sépia)" class="palette-theme-btn p-1.5 rounded-lg bg-[#fff9ee] border border-amber-600/40 text-stone-800 hover:scale-105 transition-all">Papiro</button>
+            <button type="button" data-theme="light-alabaster" onclick="ThemeController.select('light-alabaster')" title="Alabastro Canônico (Alvo Alabastro & Âmbar)" class="palette-theme-btn p-1.5 rounded-lg bg-[#f5f5f4] border border-stone-400/50 text-stone-900 hover:scale-105 transition-all">Claro</button>
           </div>
           <div class="flex items-center justify-between text-[11px] pt-1 text-[#a89f91]">
             <span>Modo Noturno:</span>
-            <button onclick="AppState.toggleTheme()" class="px-2 py-0.5 rounded bg-[#2c2722] hover:bg-[#383431] text-xs text-[#f2ca50] flex items-center gap-1">
+            <button type="button" onclick="AppState.toggleTheme()" class="px-2.5 py-1 rounded bg-[#2c2722] hover:bg-[#383431] text-xs text-[#f2ca50] flex items-center gap-1.5 transition-all">
               <span id="theme-icon-indicator" class="material-symbols-outlined text-[14px]">dark_mode</span>
               <span id="theme-label-indicator">Escuro</span>
             </button>
@@ -281,9 +566,7 @@
     <div class="flex items-center gap-3 ml-6">
       
       <!-- Alternador Rápido Escuro/Claro -->
-      <button onclick="AppState.toggleTheme()" title="Alternar Modo Escuro / Claro" class="w-10 h-10 rounded-xl bg-[#221f1c] hover:bg-[#2c2722] border border-[#d4af37]/20 flex items-center justify-center text-[#d4af37] transition-all">
-        <span class="material-symbols-outlined text-[20px]">nightlight</span>
-      </button>
+      <button onclick="AppState.toggleTheme()" id="header-theme-toggle" title="Alternar Modo Escuro / Claro" class="w-10 h-10 rounded-xl bg-[#221f1c] hover:bg-[#2c2722] border border-[#d4af37]/20 flex items-center justify-center text-[#d4af37] transition-all"><span id="header-theme-icon" class="material-symbols-outlined text-[20px]">nightlight</span></button>
 
       <!-- Botão Rápido Imprimir Relatório A4 -->
       <button onclick="Router.navigate('relatorios')" title="Abrir Emissor de Relatórios A4" class="w-10 h-10 rounded-xl bg-[#221f1c] hover:bg-[#2c2722] border border-[#d4af37]/20 flex items-center justify-center text-[#d4af37] transition-all">
@@ -1535,6 +1818,68 @@
     /**
      * ESTADO GLOBAL DA APLICAÇÃO (APPSTATE)
      */
+        /**
+     * CONFIGURAÇÃO OFICIAL DOS TEMAS LITÚRGICOS (DESKTOP & MOBILE)
+     */
+    const APP_THEMES = {
+      'dark-nocturne': {
+        id: 'dark-nocturne',
+        family: 'dark',
+        name: 'Nocturne Ouro',
+        desc: 'Carvão Litúrgico & Ouro Real',
+        icon: 'dark_mode',
+        meta: '#12100e'
+      },
+      'dark-midnight': {
+        id: 'dark-midnight',
+        family: 'dark',
+        name: 'Catedral Meia-Noite',
+        desc: 'Azul Sacral & Prata Celeste',
+        icon: 'nights_stay',
+        meta: '#090e17'
+      },
+      'dark-purple': {
+        id: 'dark-purple',
+        family: 'dark',
+        name: 'Basílica Imperial',
+        desc: 'Ametista & Púrpura Episcopal',
+        icon: 'church',
+        meta: '#14091c'
+      },
+      'dark-crimson': {
+        id: 'dark-crimson',
+        family: 'dark',
+        name: 'Vinho Sacramental',
+        desc: 'Carmesim & Rubi Litúrgico',
+        icon: 'wine_bar',
+        meta: '#17080b'
+      },
+      'light-vintage': {
+        id: 'light-vintage',
+        family: 'light',
+        name: 'Papiro Litúrgico Claro',
+        desc: 'Pergaminho Marfim & Sépia',
+        icon: 'auto_stories',
+        meta: '#f6efe0'
+      },
+      'light-alabaster': {
+        id: 'light-alabaster',
+        family: 'light',
+        name: 'Alabastro Canônico',
+        desc: 'Alabastro Alvo & Ouro Polido',
+        icon: 'temple_hindu',
+        meta: '#f8fafc'
+      },
+      'light-marble': {
+        id: 'light-marble',
+        family: 'light',
+        name: 'Mármore Alabastro',
+        desc: 'Alabastro Alvo & Ouro Polido',
+        icon: 'temple_hindu',
+        meta: '#f8fafc'
+      }
+    };
+
     const AppState = {
       events: [],
       congregations: [],
@@ -1617,34 +1962,57 @@
       },
 
       applyTheme(themeId) {
+        if (!themeId) themeId = 'dark-nocturne';
+        if (themeId === 'dark') themeId = 'dark-nocturne';
+        if (themeId === 'light') themeId = 'light-vintage';
+        if (!APP_THEMES[themeId]) themeId = 'dark-nocturne';
+
         this.theme = themeId;
+        const cfg = APP_THEMES[themeId];
         const html = document.documentElement;
         const metaTheme = document.getElementById('meta-theme-color');
-        const isDark = themeId.startsWith('dark');
-        
-        if (isDark) {
-          html.classList.add('dark');
-          if (metaTheme) metaTheme.content = '#1a1613';
-        } else {
-          html.classList.remove('dark');
-          if (metaTheme) metaTheme.content = '#f5f5f4';
+        const isDark = cfg.family === 'dark';
+
+        // 1. Limpa classes de temas anteriores no elemento <html>
+        Object.keys(APP_THEMES).forEach(k => html.classList.remove('theme-' + k));
+        html.classList.remove('dark', 'light');
+        html.classList.add(isDark ? 'dark' : 'light');
+        html.classList.add('theme-' + themeId);
+
+        // 2. Atualiza meta theme-color para harmonização com a janela do navegador
+        if (metaTheme) metaTheme.content = cfg.meta;
+
+        // 3. Atualiza logomarca da barra lateral (ouro para dark, canônica para light)
+        const logoImg = document.getElementById('pc-app-logo');
+        if (logoImg) {
+          logoImg.src = isDark ? 'logo_vazado_gold.png' : 'logo_light.png';
         }
 
+        // 4. Atualiza indicadores de texto e ícone
         const labelInd = document.getElementById('theme-label-indicator');
         const iconInd = document.getElementById('theme-icon-indicator');
+        const headerThemeIcon = document.getElementById('header-theme-icon');
         if (labelInd) labelInd.textContent = isDark ? 'Escuro' : 'Claro';
-        if (iconInd) iconInd.textContent = isDark ? 'dark_mode' : 'light_mode';
+        if (iconInd) iconInd.textContent = cfg.icon;
+        if (headerThemeIcon) headerThemeIcon.textContent = isDark ? 'nightlight' : 'light_mode';
+
+        // 5. Destaca visualmente o botão da paleta ativa
+        document.querySelectorAll('.palette-theme-btn').forEach(btn => {
+          const btnTheme = btn.getAttribute('data-theme');
+          if (btnTheme === themeId || (themeId === 'light-marble' && btnTheme === 'light-alabaster')) {
+            btn.classList.add('palette-btn-active');
+          } else {
+            btn.classList.remove('palette-btn-active');
+          }
+        });
       },
 
       toggleTheme() {
-        if (this.theme.startsWith('dark')) {
-          this.theme = 'light-vintage';
-        } else {
-          this.theme = 'dark-nocturne';
-        }
-        this.applyTheme(this.theme);
+        const isDark = this.theme.startsWith('dark');
+        const nextTheme = isDark ? 'light-vintage' : 'dark-nocturne';
+        this.applyTheme(nextTheme);
         this.saveStorage();
-        Utils.toast(`Tema alterado: ${this.theme.startsWith('dark') ? 'Modo Escuro' : 'Modo Claro'}`);
+        Utils.toast(`Modo alternado: ${nextTheme.startsWith('dark') ? 'Escuro' : 'Claro'}`);
       }
     };
 
@@ -2835,7 +3203,9 @@
       select(themeId) {
         AppState.applyTheme(themeId);
         AppState.saveStorage();
-        Utils.toast(`Paleta ativada: ${themeId}`);
+        const cfg = APP_THEMES[themeId];
+        const nome = cfg ? cfg.name : themeId;
+        Utils.toast(`Paleta ativada: ${nome}`);
       }
     };
 

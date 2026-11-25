@@ -144,6 +144,53 @@
       box-shadow: 0 0 18px rgba(56, 189, 248, 0.45) !important;
     }
 
+    
+    /* DARK - VINHO SACRAMENTAL */
+    html.theme-dark-crimson body {
+      background-color: #17080b;
+      color: #fdf2f4;
+    }
+    html.theme-dark-crimson .glass-nav-dark {
+      background: rgba(34, 11, 16, 0.88);
+      border-bottom: 1px solid rgba(251, 113, 133, 0.25);
+    }
+    html.theme-dark-crimson .glass-tabbar-dark {
+      background: rgba(34, 11, 16, 0.9);
+      border-top: 1px solid rgba(251, 113, 133, 0.25);
+    }
+    html.theme-dark-crimson .glass-card-dark {
+      background: rgba(46, 15, 22, 0.78);
+      border: 1px solid rgba(251, 113, 133, 0.24);
+      box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.65), inset 0 1px 1px 0 rgba(251, 113, 133, 0.28);
+    }
+    html.theme-dark-crimson .form-card {
+      background: rgba(46, 15, 22, 0.78) !important;
+      border-color: rgba(251, 113, 133, 0.22) !important;
+    }
+    html.theme-dark-crimson select,
+    html.theme-dark-crimson select option,
+    html.theme-dark-crimson select optgroup {
+      background-color: #220b10 !important;
+      color: #fdf2f4 !important;
+    }
+    html.theme-dark-crimson .congregation-row,
+    html.theme-dark-crimson .category-row {
+      background-color: rgba(46, 15, 22, 0.85) !important;
+      border-color: rgba(251, 113, 133, 0.25) !important;
+      color: #fdf2f4 !important;
+    }
+    html.theme-dark-crimson .congregation-row:hover,
+    html.theme-dark-crimson .category-row:hover {
+      background-color: rgba(62, 20, 30, 0.95) !important;
+      border-color: rgba(251, 113, 133, 0.5) !important;
+    }
+    html.theme-dark-crimson input:focus,
+    html.theme-dark-crimson select:focus,
+    html.theme-dark-crimson textarea:focus {
+      border-color: rgba(251, 113, 133, 0.9) !important;
+      box-shadow: 0 0 18px rgba(251, 113, 133, 0.45) !important;
+    }
+
     /* 3. DARK - BASÍLICA IMPERIAL (Ametista Episcopal, Vinho Sacro & Ouro) */
     html.theme-dark-purple body {
       background-color: #140c1a;
@@ -2272,6 +2319,16 @@
         bg: '#090e17',
         meta: '#0c1527'
       },
+            'dark-crimson': {
+        id: 'dark-crimson',
+        family: 'dark',
+        name: 'Vinho Sacramental',
+        desc: 'Carmesim Sacro & Rubi Litúrgico',
+        icon: 'wine_bar',
+        dot: '#fb7185',
+        bg: '#17080b',
+        meta: '#220b10'
+      },
       'dark-purple': {
         id: 'dark-purple',
         family: 'dark',
@@ -2403,6 +2460,7 @@
         let storedTheme = SafeStorage.get(STORAGE_KEYS.THEME);
         if (storedTheme === 'dark') storedTheme = 'dark-nocturne';
         if (storedTheme === 'light') storedTheme = 'light-vintage';
+        if (storedTheme === 'light-alabaster') storedTheme = 'light-marble';
         if (storedTheme && APP_THEMES[storedTheme]) {
           this.theme = storedTheme;
           if (APP_THEMES[storedTheme].family === 'dark') this.lastDarkTheme = storedTheme;
@@ -2422,6 +2480,7 @@
       setTheme(themeId) {
         if (themeId === 'dark') themeId = 'dark-nocturne';
         if (themeId === 'light') themeId = 'light-vintage';
+        if (themeId === 'light-alabaster') themeId = 'light-marble';
         if (!APP_THEMES[themeId]) themeId = 'dark-nocturne';
 
         this.theme = themeId;
@@ -2448,6 +2507,7 @@
       applyTheme(themeId) {
         if (themeId === 'dark') themeId = 'dark-nocturne';
         if (themeId === 'light') themeId = 'light-vintage';
+        if (themeId === 'light-alabaster') themeId = 'light-marble';
         const cfg = APP_THEMES[themeId] || APP_THEMES['dark-nocturne'];
 
         const root = document.documentElement;

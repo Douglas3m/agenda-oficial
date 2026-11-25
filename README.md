@@ -61,22 +61,30 @@ Desenvolvida com uma estética clássica vintage cerimonial (tons preto ônix `#
 
 ---
 
+## 💻 Versão Desktop Widescreen (`agenda_pc`)
+
+O sistema conta agora com uma edição exclusiva para computadores e monitores widescreen, localizada em `agenda_pc/`, mantendo **100% de paridade de mecanismos e sincronização de dados** com a versão mobile:
+* 🖥️ **Widescreen 16:9 / 21:9:** Painel lateral fixo (`288px`), cabeçalho com busca rápida (`CTRL + K`), grade de 4 KPIs e layout dividido (Calendário 8 colunas + Ficha Litúrgica 4 colunas).
+* 🏛️ **Patrimônio Completo:** Título unificado "Patrimônio", alternância entre Modo Grade e Modo Tabela Cartorial, stepper de quantidade (+/-) direto nos cartões e upload de fotos com salvamento em Base64.
+* 📄 **Relatório A4 Paisagem & Retrato:** Emissão oficial com visualizador da folha em tempo real (1:1.414) e aproveitamento total da folha A4 com um item por linha para verificação analítica.
+* 🔄 **Sincronização 1:1:** Compartilha o mesmo `localStorage` quando executado na mesma porta e permite importação/exportação transparente de backups JSON entre celular e computador.
+* 🚀 **Execução Rápida:** Basta executar `agenda_pc\iniciar_agenda_pc.bat` ou acessar `http://localhost:8181/agenda_pc/index.html`.
+
+---
+
 ## 🛠️ Como Executar em Ambiente Local (PC / Servidor)
 
 Basta iniciar qualquer servidor estático HTTP na pasta do projeto:
 
 ```bash
-# Opção 1: Via script executável do Windows
+# Executar Versão Mobile / PWA Geral:
 iniciar_agenda.bat
+# Acesso: http://localhost:8181
 
-# Opção 2: Via Python
-python -m http.server 8181
-
-# Opção 3: Via Node.js
-npx serve -l 8181 .
+# Executar Versão Desktop PC Widescreen:
+agenda_pc\iniciar_agenda_pc.bat
+# Acesso: http://localhost:8181/agenda_pc/index.html
 ```
-
-Acesse no seu navegador: `http://localhost:8181`
 
 ---
 

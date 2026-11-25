@@ -1,0 +1,2951 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agenda Oficial PC - Crônica Eclesiástica & Patrimônio (Desktop Widescreen)</title>
+
+  <!-- PWA Manifest & Favicon -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <meta name="theme-color" content="#1a1613" id="meta-theme-color" />
+
+  <!-- Tipografia Cerimonial & Ícones -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <!-- Tailwind CSS com Fallback Offline Local -->
+  <script src="tailwind.min.js"></script>
+  <script>if (typeof tailwind === 'undefined') { document.write('<script src="https://cdn.tailwindcss.com"><\/script>'); }</script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', '"Inter"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace']
+          },
+          colors: {
+            surface: {
+              DEFAULT: '#161310',
+              dim: '#12100e',
+              bright: '#3c3835',
+              container: '#221f1c',
+              'container-low': '#1a1714',
+              'container-lowest': '#100e0b',
+              'container-high': '#2c2722',
+              'container-highest': '#383431'
+            },
+            primary: {
+              DEFAULT: '#d4af37',
+              container: '#f2ca50',
+              dim: '#b8860b',
+              glow: 'rgba(212, 175, 55, 0.25)'
+            },
+            secondary: {
+              DEFAULT: '#e4c285',
+              dim: '#c9a96e',
+              dark: '#5d4514'
+            },
+            on: {
+              surface: '#e9e1dc',
+              'surface-variant': '#a89f91',
+              primary: '#161310'
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Estilo Dinâmico de Orientação de Página A4 (Paisagem vs Retrato) -->
+  <style id="dynamic-page-orientation">
+    @page {
+      size: A4 landscape;
+      margin: 8mm 10mm 10mm 10mm;
+    }
+  </style>
+
+  <style>
+    /* Scrollbar estilizada sutil */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+    ::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.3); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(212, 175, 55, 0.6); }
+
+    /* Efeitos de Vidro Líquido & Ouro */
+    .glass-card {
+      background: rgba(26, 23, 20, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(212, 175, 55, 0.18);
+    }
+    .glass-card-hover:hover {
+      background: rgba(34, 31, 28, 0.95);
+      border-color: rgba(212, 175, 55, 0.35);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(212, 175, 55, 0.1);
+    }
+    .gold-glow {
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+    }
+    .active-nav-pill {
+      background: rgba(44, 39, 34, 0.95) !important;
+      color: #f2ca50 !important;
+      border: 1px solid rgba(212, 175, 55, 0.3) !important;
+      box-shadow: inset 0 0 12px rgba(212, 175, 55, 0.15);
+      font-weight: 600;
+    }
+
+    /* Proporção Oficial da Folha A4 no Visor (1:1.414) */
+    .sheet-a4-landscape {
+      width: 100%;
+      max-width: 960px;
+      aspect-ratio: 1.414 / 1;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.85);
+    }
+    .sheet-a4-portrait {
+      width: 100%;
+      max-width: 720px;
+      aspect-ratio: 1 / 1.414;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.85);
+    }
+
+    /* Estilos de Impressão de Alta Precisão */
+    @media print {
+      body * { visibility: hidden; }
+      #print-area-wrapper, #print-area-wrapper * { visibility: visible; }
+      #print-area-wrapper {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      
+      /* Layout Condensado Analítico A4 */
+      .a4-print-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 8.5pt !important;
+      }
+      .a4-print-table th, .a4-print-table td {
+        padding: 3.5px 5px !important;
+        border-bottom: 1px solid #d1d5db;
+        line-height: 1.2;
+      }
+      .a4-print-table th {
+        background-color: #f3f4f6 !important;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 7.5pt;
+        letter-spacing: 0.05em;
+      }
+    }
+  </style>
+</head>
+<body class="bg-[#12100e] text-[#e9e1dc] font-sans antialiased selection:bg-[#d4af37] selection:text-[#12100e] overflow-x-hidden min-h-screen">
+
+  <!-- ========================================================
+       BARRA LATERAL FIXA WIDESCREEN (DESKTOP SIDEBAR - 288px)
+       ======================================================== -->
+  <aside class="no-print fixed left-0 top-0 h-full w-72 bg-[#161310]/95 backdrop-blur-2xl z-50 flex flex-col justify-between py-5 px-4 border-r border-[#d4af37]/20 shadow-[0_4px_24px_rgba(0,0,0,0.6)]">
+    
+    <!-- Topo da Sidebar: Identidade & Navegação -->
+    <div class="flex flex-col gap-6">
+      
+      <!-- Cabeçalho Litúrgico & Logomarca -->
+      <div class="flex items-center gap-3 px-2">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#2c2722] to-[#1a1714] border border-[#d4af37]/35 flex items-center justify-center shadow-[inset_0_0_12px_rgba(212,175,55,0.25)] shrink-0">
+          <img src="logo_vazado_gold.png" alt="Logo" class="w-7 h-7 object-contain" onerror="this.onerror=null; this.src='icon-192.png';" />
+        </div>
+        <div class="flex flex-col min-w-0">
+          <span class="font-serif font-bold text-base text-[#f2ca50] tracking-wide leading-tight truncate">Agenda Oficial</span>
+          <span class="text-[10px] uppercase tracking-widest text-[#a89f91] font-semibold">Crônica &amp; Tombo (PC)</span>
+        </div>
+      </div>
+
+      <!-- Navegação Principal Widescreen -->
+      <nav class="flex flex-col gap-1.5" id="desktop-nav-menu">
+        <button onclick="Router.navigate('agenda')" data-view="agenda" class="desktop-nav-link active-nav-pill flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all text-[#e9e1dc] hover:bg-[#221f1c] hover:text-[#f2ca50] w-full text-left">
+          <span class="material-symbols-outlined text-[20px] text-[#d4af37]">calendar_today</span>
+          <span class="text-xs font-semibold tracking-wide">Agenda de Eventos</span>
+        </button>
+
+        <button onclick="Router.navigate('patrimonio')" data-view="patrimonio" class="desktop-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all text-[#a89f91] hover:bg-[#221f1c] hover:text-[#f2ca50] w-full text-left">
+          <span class="material-symbols-outlined text-[20px] text-[#d4af37]">auto_stories</span>
+          <span class="text-xs font-semibold tracking-wide">Patrimônio</span>
+        </button>
+
+        <button onclick="Router.navigate('congregacoes')" data-view="congregacoes" class="desktop-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all text-[#a89f91] hover:bg-[#221f1c] hover:text-[#f2ca50] w-full text-left">
+          <span class="material-symbols-outlined text-[20px] text-[#d4af37]">groups</span>
+          <span class="text-xs font-semibold tracking-wide">Sedes &amp; Congregações</span>
+        </button>
+
+        <button onclick="Router.navigate('relatorios')" data-view="relatorios" class="desktop-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all text-[#a89f91] hover:bg-[#221f1c] hover:text-[#f2ca50] w-full text-left">
+          <span class="material-symbols-outlined text-[20px] text-[#d4af37]">print</span>
+          <span class="text-xs font-semibold tracking-wide">Relatório Oficial A4</span>
+        </button>
+
+        <button onclick="Router.navigate('backup')" data-view="backup" class="desktop-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all text-[#a89f91] hover:bg-[#221f1c] hover:text-[#f2ca50] w-full text-left">
+          <span class="material-symbols-outlined text-[20px] text-[#d4af37]">cloud_sync</span>
+          <span class="text-xs font-semibold tracking-wide">Backup &amp; Sincronização</span>
+        </button>
+      </nav>
+
+      <!-- Botões de Ação Rápida de Cadastro -->
+      <div class="pt-2 border-t border-[#d4af37]/15 flex flex-col gap-2">
+        <button onclick="EventController.openCreateModal()" class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#f2ca50] hover:brightness-110 active:scale-95 text-[#161310] font-bold text-xs flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(212,175,55,0.25)] transition-all">
+          <span class="material-symbols-outlined text-[18px]">add_circle</span>
+          <span>+ Agendar Culto / Evento</span>
+        </button>
+
+        <button onclick="PatrimonioController.openCreateModal()" class="w-full py-2 px-3 rounded-xl bg-[#221f1c] hover:bg-[#2c2722] border border-[#d4af37]/30 text-[#f2ca50] font-semibold text-xs flex items-center justify-center gap-2 transition-all">
+          <span class="material-symbols-outlined text-[18px]">post_add</span>
+          <span>+ Cadastrar Bem (Tombo)</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Base da Sidebar: Paleta Retrátil & Status da Paróquia -->
+    <div class="flex flex-col gap-3">
+      
+      <!-- PALETA RETRÁTIL DE CORES LITÚRGICAS (Conforme solicitado, não ocupa espaço excessivo) -->
+      <div class="rounded-xl bg-[#1a1714] border border-[#d4af37]/20 p-2.5">
+        <button onclick="ThemeController.togglePaletteMenu()" class="w-full flex items-center justify-between text-left text-xs font-semibold text-[#f2ca50] hover:text-[#f7dc78]">
+          <div class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm text-[#d4af37]">palette</span>
+            <span>Paletas Litúrgicas</span>
+          </div>
+          <span id="palette-chevron" class="material-symbols-outlined text-sm transition-transform duration-200">expand_more</span>
+        </button>
+
+        <!-- Gaveta de temas condensada -->
+        <div id="palette-dropdown" class="hidden pt-2 mt-2 border-t border-[#d4af37]/15 flex flex-col gap-2">
+          <div class="grid grid-cols-3 gap-1.5 text-center text-[10px]">
+            <button onclick="ThemeController.select('dark-nocturne')" title="Nocturne Ouro" class="p-1 rounded bg-[#12100e] border border-[#d4af37]/50 text-[#f2ca50] hover:scale-105 transition-all">Ouro</button>
+            <button onclick="ThemeController.select('dark-midnight')" title="Catedral Meia-Noite" class="p-1 rounded bg-[#090e17] border border-sky-500/40 text-sky-400 hover:scale-105 transition-all">Azul</button>
+            <button onclick="ThemeController.select('dark-purple')" title="Basílica Imperial" class="p-1 rounded bg-[#150a1c] border border-purple-500/40 text-purple-300 hover:scale-105 transition-all">Roxo</button>
+            <button onclick="ThemeController.select('dark-crimson')" title="Vinho Sacramental" class="p-1 rounded bg-[#1c0a0e] border border-rose-500/40 text-rose-300 hover:scale-105 transition-all">Vinho</button>
+            <button onclick="ThemeController.select('light-vintage')" title="Papiro Litúrgico Claro" class="p-1 rounded bg-[#fff9ee] border border-amber-600/40 text-stone-800 hover:scale-105 transition-all">Papiro</button>
+            <button onclick="ThemeController.select('light-alabaster')" title="Alabastro Canônico" class="p-1 rounded bg-[#f5f5f4] border border-stone-400/50 text-stone-900 hover:scale-105 transition-all">Claro</button>
+          </div>
+          <div class="flex items-center justify-between text-[11px] pt-1 text-[#a89f91]">
+            <span>Modo Noturno:</span>
+            <button onclick="AppState.toggleTheme()" class="px-2 py-0.5 rounded bg-[#2c2722] hover:bg-[#383431] text-xs text-[#f2ca50] flex items-center gap-1">
+              <span id="theme-icon-indicator" class="material-symbols-outlined text-[14px]">dark_mode</span>
+              <span id="theme-label-indicator">Escuro</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Badge de Status Canônico / Paróquia -->
+      <div class="p-3 rounded-xl bg-gradient-to-br from-[#1a1714] to-[#221f1c] border border-[#d4af37]/15 flex flex-col gap-0.5 shadow-md">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-bold text-[#f2ca50] uppercase tracking-wider">Paróquia São Pedro</span>
+          <span class="material-symbols-outlined text-[#d4af37] text-[16px]">verified</span>
+        </div>
+        <span class="text-[11px] text-[#e9e1dc] font-serif font-medium">Curia Diocesana • PC Edition</span>
+        <span class="text-[9px] text-[#a89f91]">Versão Oficial 1.1.5 (Desktop)</span>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- ========================================================
+       CABEÇALHO SUPERIOR FIXO (TOP BAR - WIDESCREEN)
+       ======================================================== -->
+  <header class="no-print fixed top-0 left-72 right-0 h-20 bg-[#161310]/85 backdrop-blur-xl z-40 flex items-center justify-between px-8 border-b border-[#d4af37]/15 shadow-sm">
+    
+    <!-- Barra de Pesquisa Global com Atalho [CTRL + K] -->
+    <div class="flex-1 max-w-2xl">
+      <div class="relative flex items-center">
+        <span class="material-symbols-outlined absolute left-3.5 text-[#d4af37] text-[20px]">search</span>
+        <input id="global-search-input" oninput="SearchController.handleGlobal(this.value)" class="w-full h-11 pl-11 pr-20 bg-[#1a1714]/80 hover:bg-[#221f1c] focus:bg-[#221f1c] border border-[#d4af37]/25 rounded-xl text-xs text-[#e9e1dc] placeholder:text-[#a89f91] focus:outline-none focus:ring-1 focus:ring-[#f2ca50] shadow-inner transition-all" placeholder="Pesquisar cultos, alfaias, atas, congregações ou número de tombo... [CTRL + K]" type="text" />
+        <kbd class="hidden sm:inline-block absolute right-3 px-2 py-0.5 rounded bg-[#2c2722] text-[#a89f91] text-[10px] font-mono border border-[#d4af37]/20">CTRL+K</kbd>
+      </div>
+    </div>
+
+    <!-- Ações Rápidas no Topo -->
+    <div class="flex items-center gap-3 ml-6">
+      
+      <!-- Alternador Rápido Escuro/Claro -->
+      <button onclick="AppState.toggleTheme()" title="Alternar Modo Escuro / Claro" class="w-10 h-10 rounded-xl bg-[#221f1c] hover:bg-[#2c2722] border border-[#d4af37]/20 flex items-center justify-center text-[#d4af37] transition-all">
+        <span class="material-symbols-outlined text-[20px]">nightlight</span>
+      </button>
+
+      <!-- Botão Rápido Imprimir Relatório A4 -->
+      <button onclick="Router.navigate('relatorios')" title="Abrir Emissor de Relatórios A4" class="w-10 h-10 rounded-xl bg-[#221f1c] hover:bg-[#2c2722] border border-[#d4af37]/20 flex items-center justify-center text-[#d4af37] transition-all">
+        <span class="material-symbols-outlined text-[20px]">print</span>
+      </button>
+
+      <!-- Botão Central de Backup -->
+      <button onclick="Router.navigate('backup')" title="Central de Backup & Transferência" class="w-10 h-10 rounded-xl bg-[#221f1c] hover:bg-[#2c2722] border border-[#d4af37]/20 flex items-center justify-center text-[#d4af37] transition-all">
+        <span class="material-symbols-outlined text-[20px]">cloud_sync</span>
+      </button>
+
+      <!-- Perfil Operacional -->
+      <div class="flex items-center gap-2.5 pl-3 border-l border-[#d4af37]/20">
+        <div class="flex flex-col text-right hidden xl:flex">
+          <span class="text-xs font-semibold text-[#e9e1dc] leading-tight">Chanceler Paroquial</span>
+          <span class="text-[10px] text-[#f2ca50]">Operador Litúrgico PC</span>
+        </div>
+        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-[#d4af37] to-[#f2ca50] flex items-center justify-center text-[#161310] font-bold shadow-[0_0_12px_rgba(212,175,55,0.3)]">
+          <span class="material-symbols-outlined text-[20px]">person</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================
+       ÁREA PRINCIPAL DE CONTEÚDO (MAIN VIEWPORT - PL-72 PT-20)
+       ======================================================== -->
+  <main class="pl-72 pt-20 min-h-screen bg-[#12100e]">
+    
+    <!-- ----------------------------------------------------
+         VIEW 1: AGENDA DE EVENTOS LITÚRGICOS
+         ---------------------------------------------------- -->
+    <section id="view-agenda" class="p-8 flex flex-col gap-6">
+      
+      <!-- Cabeçalho do Módulo de Agenda -->
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+        <div class="flex flex-col">
+          <div class="flex items-center gap-2 text-xs font-semibold text-[#f2ca50] uppercase tracking-wider mb-1">
+            <span class="material-symbols-outlined text-sm">church</span>
+            <span>Ordo Liturgicus • Agenda Canônica Geral</span>
+          </div>
+          <h1 class="font-serif font-bold text-3xl text-[#e9e1dc] tracking-tight">Agenda Geral de Cultos &amp; Solenidades</h1>
+          <p class="text-xs text-[#a89f91] mt-0.5">Gestão de eventos eclesiásticos, cultos dominicais, vigílias e celebrações com cronologia automática.</p>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="Router.navigate('relatorios')" class="px-4 py-2 rounded-xl bg-[#221f1c] hover:bg-[#2c2722] border border-[#d4af37]/30 text-xs font-semibold text-[#e4c285] flex items-center gap-2 transition-all">
+            <span class="material-symbols-outlined text-base">print</span>
+            <span>Relatório A4</span>
+          </button>
+          <button onclick="EventController.openCreateModal()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#f2ca50] text-[#161310] font-bold text-xs flex items-center gap-2 shadow-[0_4px_16px_rgba(212,175,55,0.25)] hover:brightness-110 active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-base">add_circle</span>
+            <span>+ Agendar Culto / Solenidade</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 Cards KPI Widescreen da Agenda -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        
+        <div class="glass-card rounded-xl p-4 flex flex-col justify-between relative overflow-hidden group">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-[#a89f91]">Cultos Oficiais</span>
+            <span class="px-2 py-0.5 rounded-full bg-[#2c2722] text-[#f2ca50] text-[10px] font-bold">Ordinários</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="kpi-agenda-total" class="font-serif font-bold text-3xl text-[#e9e1dc]">0</span>
+            <span class="text-xs text-[#a89f91]">registrados</span>
+          </div>
+          <div class="w-full bg-[#2c2722] h-1 rounded-full mt-3 overflow-hidden">
+            <div class="bg-[#f2ca50] h-full rounded-full" style="width: 85%;"></div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-xl p-4 flex flex-col justify-between relative overflow-hidden group">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-[#a89f91]">Departamentais</span>
+            <span class="px-2 py-0.5 rounded-full bg-[#2c2722] text-[#e4c285] text-[10px] font-bold">Agrupamentos</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="kpi-agenda-deptos" class="font-serif font-bold text-3xl text-[#e4c285]">0</span>
+            <span class="text-xs text-[#a89f91]">reuniões</span>
+          </div>
+          <div class="w-full bg-[#2c2722] h-1 rounded-full mt-3 overflow-hidden">
+            <div class="bg-[#e4c285] h-full rounded-full" style="width: 60%;"></div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-xl p-4 flex flex-col justify-between relative overflow-hidden group">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-[#a89f91]">Sedes Ativas</span>
+            <span class="px-2 py-0.5 rounded-full bg-[#2c2722] text-[#f2ca50] text-[10px] font-bold">100% integradas</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="kpi-agenda-sedes" class="font-serif font-bold text-3xl text-[#e9e1dc]">4</span>
+            <span class="text-xs text-[#a89f91]">congregações</span>
+          </div>
+          <div class="w-full bg-[#2c2722] h-1 rounded-full mt-3 overflow-hidden">
+            <div class="bg-[#d4af37] h-full rounded-full" style="width: 100%;"></div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-xl p-4 flex flex-col justify-between relative overflow-hidden group">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-[#a89f91]">Acervo Patrimonial</span>
+            <span class="px-2 py-0.5 rounded-full bg-[#2c2722] text-emerald-400 text-[10px] font-bold">Livro de Tombo</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="kpi-agenda-patrimonio" class="font-serif font-bold text-3xl text-emerald-300">0</span>
+            <span class="text-xs text-[#a89f91]">bens catalogados</span>
+          </div>
+          <div class="w-full bg-[#2c2722] h-1 rounded-full mt-3 overflow-hidden">
+            <div class="bg-emerald-500 h-full rounded-full" style="width: 95%;"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Barra de Controle, Modos de Visualização & Navegação Mensal -->
+      <div class="glass-card rounded-xl p-4 flex flex-col gap-3">
+        <div class="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4">
+          
+          <!-- Seletor de Modo de Exibição -->
+          <div class="flex items-center bg-[#100e0b] p-1 rounded-lg self-start border border-[#d4af37]/20">
+            <button onclick="EventController.setViewMode('mes')" id="btn-view-mes" class="px-3.5 py-1.5 rounded-md text-xs font-bold bg-[#2c2722] text-[#f2ca50] shadow-sm flex items-center gap-1.5 transition-all">
+              <span class="material-symbols-outlined text-sm">calendar_view_month</span>
+              <span>Mês</span>
+            </button>
+            <button onclick="EventController.setViewMode('tabela')" id="btn-view-tabela" class="px-3.5 py-1.5 rounded-md text-xs text-[#a89f91] hover:text-[#e9e1dc] flex items-center gap-1.5 transition-all">
+              <span class="material-symbols-outlined text-sm">table_rows</span>
+              <span>Tabela Cronológica</span>
+            </button>
+          </div>
+
+          <!-- Navegação Mensal -->
+          <div class="flex items-center justify-center gap-2">
+            <button onclick="EventController.changeMonth(-1)" class="w-8 h-8 rounded-lg bg-[#221f1c] hover:bg-[#2c2722] border border-[#d4af37]/20 flex items-center justify-center text-[#e4c285] transition-all">
+              <span class="material-symbols-outlined text-sm">chevron_left</span>
+            </button>
+            <div class="flex items-center gap-2 px-3 py-1 bg-[#100e0b] border border-[#d4af37]/20 rounded-lg">
+              <span class="material-symbols-outlined text-[#f2ca50] text-sm">event</span>
+              <span id="current-month-display" class="font-serif text-xs font-bold text-[#e9e1dc]">Novembro 2026</span>
+            </div>
+            <button onclick="EventController.changeMonth(1)" class="w-8 h-8 rounded-lg bg-[#221f1c] hover:bg-[#2c2722] border border-[#d4af37]/20 flex items-center justify-center text-[#e4c285] transition-all">
+              <span class="material-symbols-outlined text-sm">chevron_right</span>
+            </button>
+            <button onclick="EventController.goToToday()" class="px-3 py-1 rounded-lg bg-[#2c2722] hover:bg-[#383431] text-[11px] font-semibold text-[#f2ca50] border border-[#d4af37]/20 transition-all">
+              Hoje
+            </button>
+          </div>
+
+          <!-- Filtro por Sede / Congregação -->
+          <div class="flex items-center gap-2">
+            <span class="text-[11px] text-[#a89f91] font-semibold uppercase">Sede:</span>
+            <select id="agenda-filter-congregacao" onchange="EventController.filterByCongregation(this.value)" class="h-9 px-3 rounded-lg bg-[#1a1714] border border-[#d4af37]/25 text-xs text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]">
+              <option value="ALL">Todas as Congregações</option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Split Screen: Calendário 8 Colunas + Ficha Litúrgica Lateral 4 Colunas -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- COLUNA ESQUERDA (8 colunas): Matriz do Calendário ou Tabela -->
+        <div class="lg:col-span-8 flex flex-col gap-6">
+          
+          <!-- Matriz Mensal Interativa (7 colunas de DOM a SAB) -->
+          <div id="calendar-matrix-container" class="glass-card rounded-xl p-4 flex flex-col">
+            <!-- Cabeçalho dos Dias da Semana -->
+            <div class="grid grid-cols-7 gap-1.5 text-center mb-2">
+              <div class="py-1.5 rounded bg-[#221f1c] text-[#f2ca50] text-[11px] font-bold uppercase tracking-wider">DOM</div>
+              <div class="py-1.5 rounded bg-[#1a1714] text-[#a89f91] text-[11px] font-semibold uppercase">SEG</div>
+              <div class="py-1.5 rounded bg-[#1a1714] text-[#a89f91] text-[11px] font-semibold uppercase">TER</div>
+              <div class="py-1.5 rounded bg-[#1a1714] text-[#a89f91] text-[11px] font-semibold uppercase">QUA</div>
+              <div class="py-1.5 rounded bg-[#1a1714] text-[#a89f91] text-[11px] font-semibold uppercase">QUI</div>
+              <div class="py-1.5 rounded bg-[#1a1714] text-[#a89f91] text-[11px] font-semibold uppercase">SEX</div>
+              <div class="py-1.5 rounded bg-[#221f1c] text-[#e4c285] text-[11px] font-bold uppercase tracking-wider">SÁB</div>
+            </div>
+
+            <!-- Grade Dinâmica de Dias -->
+            <div id="calendar-days-grid" class="grid grid-cols-7 gap-1.5">
+              <!-- Renderizado via JavaScript -->
+            </div>
+          </div>
+
+          <!-- Tabela Cronológica Canônica (Alternativa ao Calendário) -->
+          <div id="agenda-table-view-container" class="hidden glass-card rounded-xl p-4 overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="border-b border-[#d4af37]/20 text-[#f2ca50] font-serif uppercase tracking-wider text-[11px]">
+                  <th class="py-2.5 px-3">Data / Hora</th>
+                  <th class="py-2.5 px-3">Solenidade / Culto</th>
+                  <th class="py-2.5 px-3">Congregação</th>
+                  <th class="py-2.5 px-3">Pregador / Dirigente</th>
+                  <th class="py-2.5 px-3 text-center">Cronologia</th>
+                  <th class="py-2.5 px-3 text-right">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="agenda-table-body" class="divide-y divide-[#d4af37]/10">
+                <!-- Renderizado via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Linha do Tempo / Ordem do Dia Selecionado -->
+          <div class="glass-card rounded-xl p-5 flex flex-col gap-4">
+            <div class="flex items-center justify-between pb-3 border-b border-[#d4af37]/15">
+              <div class="flex items-center gap-2.5">
+                <span class="material-symbols-outlined text-[#f2ca50] text-xl">schedule</span>
+                <div>
+                  <h3 id="order-of-day-title" class="font-serif font-bold text-base text-[#e9e1dc]">Ordem do Dia</h3>
+                  <span id="order-of-day-subtitle" class="text-[11px] text-[#a89f91]">Selecione um dia no calendário para consultar</span>
+                </div>
+              </div>
+              <button onclick="EventController.openCreateModal()" class="px-3 py-1.5 rounded-lg bg-[#2c2722] hover:bg-[#383431] text-[#f2ca50] text-xs font-semibold flex items-center gap-1.5 border border-[#d4af37]/20 transition-all">
+                <span class="material-symbols-outlined text-sm">add</span>
+                <span>Inserir Neste Dia</span>
+              </button>
+            </div>
+
+            <!-- Lista de eventos da data selecionada -->
+            <div id="order-of-day-events" class="flex flex-col gap-2.5">
+              <!-- Renderizado via JavaScript -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- COLUNA DIREITA (4 colunas): Ficha Litúrgica & Dossier do Evento -->
+        <div class="lg:col-span-4 flex flex-col gap-4 sticky top-24">
+          <div class="glass-card rounded-xl overflow-hidden shadow-xl flex flex-col">
+            
+            <div class="bg-[#221f1c] px-4 py-3 flex items-center justify-between border-b border-[#d4af37]/20">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-[#f2ca50] text-base">verified</span>
+                <span class="text-xs font-bold uppercase tracking-wider text-[#f2ca50]">Ficha Litúrgica Canônica</span>
+              </div>
+              <span id="dossier-badge-status" class="px-2 py-0.5 rounded bg-[#100e0b] text-[10px] text-[#e4c285] font-mono">Destaque</span>
+            </div>
+
+            <!-- Imagem de Fundo Litúrgica do Evento -->
+            <div class="relative w-full h-40 bg-[#1a1714] overflow-hidden">
+              <img id="dossier-hero-img" src="logo_dark.png" class="w-full h-full object-cover opacity-60" alt="Liturgia" onerror="this.onerror=null; this.src='icon-512.png';" />
+              <div class="absolute inset-0 bg-gradient-to-t from-[#161310] via-transparent to-transparent"></div>
+              <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+                <span id="dossier-congregacao-pill" class="px-2.5 py-1 rounded bg-[#100e0b]/90 text-[11px] font-semibold text-[#f2ca50] border border-[#d4af37]/30 shadow-md">CONGR. CENTRAL</span>
+                <span id="dossier-horario-pill" class="px-2 py-0.5 rounded bg-[#d4af37] text-[10px] font-bold text-[#161310]">19:30</span>
+              </div>
+            </div>
+
+            <!-- Conteúdo do Dossier -->
+            <div class="p-5 flex flex-col gap-3.5">
+              <div>
+                <h4 id="dossier-titulo" class="font-serif font-bold text-lg text-[#f4ecd8] leading-tight">Selecione um Culto</h4>
+                <p id="dossier-descricao" class="text-xs text-[#a89f91] mt-1 line-clamp-3">Clique em qualquer evento do calendário para visualizar a ata, cronologia, liturgia e celebrar com solenidade.</p>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 p-2.5 rounded-lg bg-[#100e0b] border border-[#d4af37]/15 text-xs">
+                <div>
+                  <span class="text-[10px] text-[#a89f91] uppercase block">Pregador / Celebrante</span>
+                  <strong id="dossier-pregador" class="text-[#e9e1dc] text-[11px]">Pr. Presidente</strong>
+                </div>
+                <div>
+                  <span class="text-[10px] text-[#a89f91] uppercase block">Data Marcada</span>
+                  <strong id="dossier-data" class="text-[#f2ca50] text-[11px] font-mono">2026-11-25</strong>
+                </div>
+              </div>
+
+              <!-- Ações da Ficha -->
+              <div class="pt-2 flex items-center gap-2 border-t border-[#d4af37]/15">
+                <button id="btn-dossier-edit" onclick="EventController.editSelected()" class="flex-1 py-2 rounded-lg bg-[#2c2722] hover:bg-[#383431] text-[#f2ca50] text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
+                  <span class="material-symbols-outlined text-sm">edit</span>
+                  <span>Editar</span>
+                </button>
+                <button id="btn-dossier-duplicate" onclick="EventController.duplicateSelected()" class="px-3 py-2 rounded-lg bg-[#221f1c] hover:bg-[#2c2722] text-[#e4c285] text-xs font-semibold flex items-center justify-center gap-1 transition-all" title="Duplicar Evento">
+                  <span class="material-symbols-outlined text-sm">content_copy</span>
+                </button>
+                <button id="btn-dossier-delete" onclick="EventController.deleteSelected()" class="px-3 py-2 rounded-lg bg-[#221f1c] hover:bg-rose-900/40 text-rose-400 text-xs font-semibold flex items-center justify-center gap-1 transition-all" title="Excluir Evento">
+                  <span class="material-symbols-outlined text-sm">delete</span>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ----------------------------------------------------
+         VIEW 2: PATRIMÔNIO (LIVRO DE TOMBO WIDESCREEN)
+         ---------------------------------------------------- -->
+    <section id="view-patrimonio" class="hidden p-8 flex flex-col gap-6">
+      
+      <!-- Cabeçalho do Módulo de Patrimônio (Título strictly 'Patrimônio') -->
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+        <div class="flex flex-col">
+          <div class="flex items-center gap-2 text-xs font-semibold text-[#f2ca50] uppercase tracking-wider mb-1">
+            <span class="material-symbols-outlined text-sm">auto_stories</span>
+            <span>Livro de Tombo • Acervo Diocesano</span>
+          </div>
+          <h1 class="font-serif font-bold text-3xl text-[#e9e1dc] tracking-tight">Patrimônio</h1>
+          <p class="text-xs text-[#a89f91] mt-0.5">Registro cartorial diocesano de alfaias, vasos sagrados, mobília litúrgica e acervo patrimonial tutelado.</p>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="Router.navigate('relatorios')" class="px-4 py-2 rounded-xl bg-[#221f1c] hover:bg-[#2c2722] border border-[#d4af37]/30 text-xs font-semibold text-[#e4c285] flex items-center gap-2 transition-all">
+            <span class="material-symbols-outlined text-base">print</span>
+            <span>Exportar A4</span>
+          </button>
+          <button onclick="PatrimonioController.openCreateModal()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#f2ca50] text-[#161310] font-bold text-xs flex items-center gap-2 shadow-[0_4px_16px_rgba(212,175,55,0.25)] hover:brightness-110 active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-base">add_circle</span>
+            <span>+ Cadastrar Novo Tombo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 Cards KPI Widescreen do Patrimônio -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        
+        <div class="glass-card rounded-xl p-4 flex flex-col justify-between group">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-[#a89f91]">Acervo Registrado</span>
+            <span class="px-2 py-0.5 rounded-full bg-[#2c2722] text-[#f2ca50] text-[10px] font-bold">100% Tombados</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="kpi-pat-total" class="font-serif font-bold text-3xl text-[#e9e1dc]">0</span>
+            <span class="text-xs text-[#a89f91]">itens de acervo</span>
+          </div>
+          <div class="w-full bg-[#2c2722] h-1 rounded-full mt-3 overflow-hidden">
+            <div class="bg-[#f2ca50] h-full rounded-full" style="width: 100%;"></div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-xl p-4 flex flex-col justify-between group">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-[#a89f91]">Total de Unidades</span>
+            <span class="px-2 py-0.5 rounded-full bg-[#2c2722] text-[#e4c285] text-[10px] font-bold">Quantitativo</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="kpi-pat-unidades" class="font-serif font-bold text-3xl text-[#e4c285]">0</span>
+            <span class="text-xs text-[#a89f91]">peças físicas</span>
+          </div>
+          <div class="w-full bg-[#2c2722] h-1 rounded-full mt-3 overflow-hidden">
+            <div class="bg-[#e4c285] h-full rounded-full" style="width: 75%;"></div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-xl p-4 flex flex-col justify-between group">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-[#a89f91]">Sedes Atendidas</span>
+            <span class="px-2 py-0.5 rounded-full bg-[#2c2722] text-[#f2ca50] text-[10px] font-bold">Distribuição</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="kpi-pat-sedes" class="font-serif font-bold text-3xl text-[#e9e1dc]">4</span>
+            <span class="text-xs text-[#a89f91]">templos</span>
+          </div>
+          <div class="w-full bg-[#2c2722] h-1 rounded-full mt-3 overflow-hidden">
+            <div class="bg-[#d4af37] h-full rounded-full" style="width: 100%;"></div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-xl p-4 flex flex-col justify-between group">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-[#a89f91]">Fotos Documentadas</span>
+            <span class="px-2 py-0.5 rounded-full bg-[#2c2722] text-emerald-400 text-[10px] font-bold">Base64</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="kpi-pat-fotos" class="font-serif font-bold text-3xl text-emerald-300">0</span>
+            <span class="text-xs text-[#a89f91]">fotografados</span>
+          </div>
+          <div class="w-full bg-[#2c2722] h-1 rounded-full mt-3 overflow-hidden">
+            <div class="bg-emerald-500 h-full rounded-full" style="width: 90%;"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Barra de Filtros e Alternador Grade / Tabela -->
+      <div class="glass-card rounded-xl p-4 flex flex-col gap-3">
+        <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+          
+          <!-- Seletor Modo Grade vs Tabela -->
+          <div class="flex items-center bg-[#100e0b] p-1 rounded-lg self-start border border-[#d4af37]/20">
+            <button onclick="PatrimonioController.setViewMode('grade')" id="btn-pat-view-grade" class="px-3.5 py-1.5 rounded-md text-xs font-bold bg-[#2c2722] text-[#f2ca50] shadow-sm flex items-center gap-1.5 transition-all">
+              <span class="material-symbols-outlined text-sm">grid_view</span>
+              <span>Grade</span>
+            </button>
+            <button onclick="PatrimonioController.setViewMode('tabela')" id="btn-pat-view-tabela" class="px-3.5 py-1.5 rounded-md text-xs text-[#a89f91] hover:text-[#e9e1dc] flex items-center gap-1.5 transition-all">
+              <span class="material-symbols-outlined text-sm">table_rows</span>
+              <span>Tabela Cartorial</span>
+            </button>
+          </div>
+
+          <!-- Filtros de Seleção (Ano, Sede, Departamento, Ordenação) -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2 flex-1 max-w-4xl">
+            
+            <div class="flex flex-col gap-1">
+              <label class="text-[10px] font-bold uppercase text-[#a89f91] tracking-wider">Ano</label>
+              <select id="pat-filter-ano" onchange="PatrimonioController.applyFilters()" class="h-8 px-2.5 rounded-lg bg-[#1a1714] border border-[#d4af37]/25 text-xs text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]">
+                <option value="ALL">Todos os Anos</option>
+              </select>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label class="text-[10px] font-bold uppercase text-[#a89f91] tracking-wider">Congregação</label>
+              <select id="pat-filter-sede" onchange="PatrimonioController.applyFilters()" class="h-8 px-2.5 rounded-lg bg-[#1a1714] border border-[#d4af37]/25 text-xs text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]">
+                <option value="ALL">Todas as Congregações</option>
+              </select>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label class="text-[10px] font-bold uppercase text-[#a89f91] tracking-wider">Departamento</label>
+              <select id="pat-filter-depto" onchange="PatrimonioController.applyFilters()" class="h-8 px-2.5 rounded-lg bg-[#1a1714] border border-[#d4af37]/25 text-xs text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]">
+                <option value="ALL">Todos os Departamentos</option>
+              </select>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label class="text-[10px] font-bold uppercase text-[#a89f91] tracking-wider">Ordenar</label>
+              <select id="pat-filter-sort" onchange="PatrimonioController.applyFilters()" class="h-8 px-2.5 rounded-lg bg-[#1a1714] border border-[#d4af37]/25 text-xs text-[#f2ca50] focus:outline-none focus:border-[#f2ca50]">
+                <option value="tombo_asc">Nº de Tombo</option>
+                <option value="ano_desc">Ano (Mais Recentes)</option>
+                <option value="ano_asc">Ano (Mais Antigos)</option>
+                <option value="nome_asc">Nome do Bem (A-Z)</option>
+                <option value="qtd_desc">Maior Quantidade</option>
+              </select>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Conteúdo do Patrimônio: Modo Grade (3 colunas) -->
+      <div id="patrimonio-grid-view" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <!-- Renderizado dinamicamente via JavaScript -->
+      </div>
+
+      <!-- Conteúdo do Patrimônio: Modo Tabela Cartorial -->
+      <div id="patrimonio-table-view" class="hidden glass-card rounded-xl p-4 overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="border-b border-[#d4af37]/20 text-[#f2ca50] font-serif uppercase tracking-wider text-[11px]">
+              <th class="py-2.5 px-3">Foto</th>
+              <th class="py-2.5 px-3">Tombo</th>
+              <th class="py-2.5 px-3">Nome do Bem</th>
+              <th class="py-2.5 px-3">Congregação / Sede</th>
+              <th class="py-2.5 px-3">Departamento</th>
+              <th class="py-2.5 px-3 text-center">Ano</th>
+              <th class="py-2.5 px-3 text-center">Qtd</th>
+              <th class="py-2.5 px-3 text-right">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="patrimonio-table-body" class="divide-y divide-[#d4af37]/10">
+            <!-- Renderizado dinamicamente via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- ----------------------------------------------------
+         VIEW 3: CONGREGAÇÕES & SEDES (ADMINISTRAÇÃO ECLESIÁSTICA)
+         ---------------------------------------------------- -->
+    <section id="view-congregacoes" class="hidden p-8 flex flex-col gap-6">
+      
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+        <div class="flex flex-col">
+          <div class="flex items-center gap-2 text-xs font-semibold text-[#f2ca50] uppercase tracking-wider mb-1">
+            <span class="material-symbols-outlined text-sm">church</span>
+            <span>Chancelaria • Sedes Canônicas</span>
+          </div>
+          <h1 class="font-serif font-bold text-3xl text-[#e9e1dc] tracking-tight">Sedes &amp; Congregações</h1>
+          <p class="text-xs text-[#a89f91] mt-0.5">Jurisdições territoriais, congregações sufragâneas e congregações filiais sob administração diocesana.</p>
+        </div>
+
+        <button onclick="CongregationController.openCreateModal()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#f2ca50] text-[#161310] font-bold text-xs flex items-center gap-2 shadow-[0_4px_16px_rgba(212,175,55,0.25)] hover:brightness-110 active:scale-95 transition-all">
+          <span class="material-symbols-outlined text-base">add_circle</span>
+          <span>+ Nova Congregação / Filial</span>
+        </button>
+      </div>
+
+      <!-- Card Destaque: Catedral Basílica São Pedro Apóstolo (Matriz) -->
+      <div class="glass-card rounded-2xl overflow-hidden shadow-2xl border border-[#d4af37]/30">
+        <div class="grid grid-cols-1 md:grid-cols-12">
+          
+          <div class="md:col-span-5 relative h-64 md:h-auto bg-[#1a1714]">
+            <img src="logo_dark.png" class="w-full h-full object-cover opacity-75" alt="Matriz" onerror="this.onerror=null; this.src='icon-512.png';" />
+            <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-transparent to-[#161310]"></div>
+            <div class="absolute top-4 left-4 px-2.5 py-1 rounded bg-[#100e0b]/90 text-[10px] font-bold text-[#f2ca50] border border-[#d4af37]/30">
+              SEDE PAROQUIAL MATRIZ
+            </div>
+          </div>
+
+          <div class="md:col-span-7 p-6 flex flex-col justify-between">
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] uppercase font-mono tracking-widest text-[#a89f91]">Jurisdição Canônica Plena</span>
+                <span class="px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold">Ativa</span>
+              </div>
+              <h2 class="font-serif font-bold text-2xl text-[#f4ecd8]">Catedral Basílica de São Pedro Apóstolo</h2>
+              <p class="text-xs text-[#a89f91] line-clamp-2">Sede paroquial governamental, guardiã dos sacramentos gerais, relicário do Tombo Paroquial e centro das celebrações diocesanas.</p>
+
+              <!-- Mini Stats -->
+              <div class="grid grid-cols-3 gap-2 p-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/15 mt-2">
+                <div>
+                  <span class="text-[10px] text-[#a89f91] block">Capacidade</span>
+                  <strong class="text-xs text-[#e9e1dc]">1.200 assentos</strong>
+                </div>
+                <div>
+                  <span class="text-[10px] text-[#a89f91] block">Cultos Mensais</span>
+                  <strong class="text-xs text-[#f2ca50]">24 solenes</strong>
+                </div>
+                <div>
+                  <span class="text-[10px] text-[#a89f91] block">Tombos Guardados</span>
+                  <strong class="text-xs text-emerald-300">142 alfaias</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-4 mt-3 border-t border-[#d4af37]/15 flex items-center justify-between">
+              <span class="text-xs text-[#e4c285] font-serif">Dirigente Titular: <strong>Pr. Presidente</strong></span>
+              <button onclick="Router.navigate('agenda')" class="px-3.5 py-1.5 rounded-lg bg-[#2c2722] hover:bg-[#383431] text-xs font-semibold text-[#f2ca50] flex items-center gap-1.5">
+                <span>Ver Agenda Desta Sede</span>
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Grade das Demais Congregações -->
+      <div id="congregacoes-cards-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <!-- Renderizado dinamicamente via JavaScript -->
+      </div>
+
+    </section>
+
+    <!-- ----------------------------------------------------
+         VIEW 4: SISTEMA DE RELATÓRIOS OFICIAIS A4
+         ---------------------------------------------------- -->
+    <section id="view-relatorios" class="hidden p-8 flex flex-col gap-6">
+      
+      <!-- Cabeçalho do Emissor de Relatórios -->
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+        <div class="flex flex-col">
+          <div class="flex items-center gap-2 text-xs font-semibold text-[#f2ca50] uppercase tracking-wider mb-1">
+            <span class="material-symbols-outlined text-sm">description</span>
+            <span>Chancelaria Notarial • Emissão Canônica A4</span>
+          </div>
+          <h1 class="font-serif font-bold text-3xl text-[#e9e1dc] tracking-tight">Emissão de Relatório Oficial A4</h1>
+          <p class="text-xs text-[#a89f91] mt-0.5">Relatório condensado de alta densidade analítica, otimizado para aproveitamento de 100% da folha A4.</p>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="ReportController.print()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#f2ca50] text-[#161310] font-bold text-xs flex items-center gap-2 shadow-[0_4px_20px_rgba(212,175,55,0.3)] hover:brightness-110 active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-lg">print</span>
+            <span>Imprimir Documento Oficial (A4)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Grid Monumental Widescreen: 5 Colunas (Parâmetros) + 7 Colunas (Preview A4) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- COLUNA ESQUERDA (5 Colunas): Parâmetros de Emissão -->
+        <div class="lg:col-span-5 flex flex-col gap-5 glass-card rounded-2xl p-6">
+          
+          <div class="flex items-center gap-2.5 pb-3 border-b border-[#d4af37]/15">
+            <span class="material-symbols-outlined text-[#f2ca50] text-xl">tune</span>
+            <div>
+              <h2 class="font-serif font-bold text-base text-[#e9e1dc]">Parâmetros de Emissão</h2>
+              <span class="text-[11px] text-[#a89f91]">Defina o escopo litúrgico antes de imprimir</span>
+            </div>
+          </div>
+
+          <!-- Tipo de Documento: Livro de Tombo (Patrimônio) vs Ata de Solenidades (Agenda) -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[10px] font-bold uppercase tracking-wider text-[#a89f91]">Tipo de Documento Oficial</label>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="ReportController.setDocType('patrimonio')" id="btn-doctype-patrimonio" class="py-2.5 px-3 rounded-xl bg-[#2c2722] text-[#f2ca50] border border-[#d4af37]/40 font-bold text-xs flex items-center justify-center gap-2 transition-all">
+                <span class="material-symbols-outlined text-sm">auto_stories</span>
+                <span>Patrimônio</span>
+              </button>
+              <button onclick="ReportController.setDocType('agenda')" id="btn-doctype-agenda" class="py-2.5 px-3 rounded-xl bg-[#1a1714] text-[#a89f91] border border-[#d4af37]/15 text-xs flex items-center justify-center gap-2 hover:text-[#e9e1dc] transition-all">
+                <span class="material-symbols-outlined text-sm">event</span>
+                <span>Agenda / Cultos</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- SELETOR DINÂMICO DE ORIENTAÇÃO DA FOLHA (Paisagem por padrão vs Retrato) -->
+          <div class="flex flex-col gap-1.5 p-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/20">
+            <label class="text-[10px] font-bold uppercase tracking-wider text-[#f2ca50] flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">aspect_ratio</span>
+              <span>Orientação de Impressão A4</span>
+            </label>
+            <div class="grid grid-cols-2 gap-2 mt-1">
+              <button onclick="ReportController.setOrientation('landscape')" id="btn-orient-landscape" class="py-2 px-3 rounded-lg bg-[#2c2722] text-[#f2ca50] border border-[#d4af37]/40 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
+                <span class="material-symbols-outlined text-sm">crop_landscape</span>
+                <span>Paisagem (297mm) • Padrão</span>
+              </button>
+              <button onclick="ReportController.setOrientation('portrait')" id="btn-orient-portrait" class="py-2 px-3 rounded-lg bg-[#1a1714] text-[#a89f91] border border-[#d4af37]/15 text-xs flex items-center justify-center gap-1.5 hover:text-[#e9e1dc] transition-all">
+                <span class="material-symbols-outlined text-sm">crop_portrait</span>
+                <span>Retrato (210mm)</span>
+              </button>
+            </div>
+            <span class="text-[10px] text-[#a89f91] italic mt-1">O modo Paisagem é recomendado para relatórios condensados item por linha, evitando qualquer quebra de texto.</span>
+          </div>
+
+          <!-- Filtro de Sede -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[10px] font-bold uppercase tracking-wider text-[#a89f91]">Filtrar por Sede / Congregação</label>
+            <select id="report-filter-sede" onchange="ReportController.updatePreview()" class="h-10 px-3 rounded-xl bg-[#1a1714] border border-[#d4af37]/25 text-xs text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]">
+              <option value="ALL">Todas as Congregações (Inventário Geral)</option>
+            </select>
+          </div>
+
+          <!-- Opções de Apresentação -->
+          <div class="flex flex-col gap-2 pt-2 border-t border-[#d4af37]/15">
+            <label class="flex items-center gap-2 cursor-pointer text-xs text-[#e9e1dc]">
+              <input type="checkbox" id="report-opt-chancelas" checked onchange="ReportController.updatePreview()" class="rounded bg-[#1a1714] border-[#d4af37]/40 text-[#d4af37] focus:ring-0" />
+              <span>Incluir chancelas de autenticação e termos de conferência</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer text-xs text-[#e9e1dc]">
+              <input type="checkbox" id="report-opt-fotos" checked onchange="ReportController.updatePreview()" class="rounded bg-[#1a1714] border-[#d4af37]/40 text-[#d4af37] focus:ring-0" />
+              <span>Exibir miniaturas de fotografias dos bens tombados</span>
+            </label>
+          </div>
+
+          <!-- Botão Principal de Impressão -->
+          <button onclick="ReportController.print()" class="w-full py-3 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#f2ca50] text-[#161310] font-bold text-xs flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(212,175,55,0.3)] hover:brightness-110 active:scale-[0.99] transition-all">
+            <span class="material-symbols-outlined text-lg">print</span>
+            <span>Imprimir Relatório Oficial (A4)</span>
+          </button>
+
+        </div>
+
+        <!-- COLUNA DIREITA (7 Colunas): Visor A4 em Tempo Real -->
+        <div class="lg:col-span-7 flex flex-col items-center">
+          
+          <!-- Visor da Folha A4 Oficial -->
+          <div id="print-area-wrapper" class="sheet-a4-landscape bg-[#1a1714] text-[#ece5d8] rounded-xl p-8 sm:p-10 border border-[#d4af37]/30 shadow-2xl relative flex flex-col gap-4 overflow-hidden transition-all duration-300">
+            
+            <!-- Marca D'água Litúrgica de Fundo -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
+              <span class="material-symbols-outlined text-[360px]">church</span>
+            </div>
+
+            <!-- Cabeçalho Oficial do Documento A4 -->
+            <div class="relative flex flex-col items-center text-center gap-1.5 pb-4 border-b border-[#d4af37]/30 bg-gradient-to-b from-[#25201b]/80 to-transparent p-3 rounded-lg">
+              <div class="flex items-center justify-between w-full pb-1 text-[10px]">
+                <div class="text-left flex flex-col">
+                  <span class="font-bold text-[#d4af37] uppercase tracking-widest">ARQUIVO ECLESIÁSTICO • CHANCELARIA LITÚRGICA</span>
+                  <span class="text-[#a89f91]">Paróquia de São Pedro Apóstolo • Diœcesis MMXXIV</span>
+                </div>
+                <div class="text-right flex flex-col">
+                  <span id="report-sheet-protocolo" class="font-bold text-[#f2ca50] tracking-wider">LIVRO DE TOMBO • VOL. VIII</span>
+                  <span class="text-[#a89f91]">DOCUMENTO AUTÊNTICO Nº 144-V</span>
+                </div>
+              </div>
+
+              <div class="h-0.5 w-32 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent my-1"></div>
+
+              <h2 id="report-sheet-title" class="font-serif font-bold text-xl text-[#f4ecd8] tracking-wide uppercase">PATRIMÔNIO</h2>
+              <p id="report-sheet-subtitle" class="text-[11px] text-[#e4c285] tracking-widest uppercase">Rol Analítico de Bens Móveis, Imóveis, Vasos Sagrados e Alfaias</p>
+            </div>
+
+            <!-- Barra de Metadados do Relatório -->
+            <div class="grid grid-cols-3 gap-2 bg-[#100e0b] p-2 rounded-lg text-[11px] font-mono border border-[#d4af37]/20">
+              <div class="flex items-center gap-1.5">
+                <span class="text-[#d4af37]">Emissão:</span>
+                <span id="report-sheet-date" class="text-[#e9e1dc]">25/11/2026</span>
+              </div>
+              <div class="flex items-center justify-center gap-1.5">
+                <span class="text-[#d4af37]">Sede:</span>
+                <span id="report-sheet-sede-label" class="text-[#f2ca50] truncate font-bold">Geral (Todas)</span>
+              </div>
+              <div class="flex items-center justify-end gap-1.5">
+                <span class="text-[#d4af37]">Orientação:</span>
+                <span id="report-sheet-orientation-label" class="text-[#e4c285] font-bold">Paisagem (297mm)</span>
+              </div>
+            </div>
+
+            <!-- Tabela Condensada Analítica A4 (Item por Linha) -->
+            <div class="flex-1 overflow-x-auto">
+              <table class="a4-print-table w-full text-left text-xs border-collapse">
+                <thead id="report-table-head">
+                  <!-- Renderizado via JavaScript conforme o tipo de documento -->
+                </thead>
+                <tbody id="report-table-body" class="divide-y divide-[#d4af37]/15">
+                  <!-- Renderizado via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Rodapé Notarial & Chancelas para Assinaturas -->
+            <div id="report-sheet-signatures" class="pt-4 border-t border-[#d4af37]/20 grid grid-cols-3 gap-6 text-center text-[10px] text-[#a89f91] mt-auto">
+              <div class="flex flex-col gap-1 items-center">
+                <div class="w-full border-b border-[#a89f91]/40 mb-1"></div>
+                <span class="font-bold text-[#e9e1dc]">Pr. Presidente / Dirigente</span>
+                <span>Visto e Homologado</span>
+              </div>
+              <div class="flex flex-col gap-1 items-center">
+                <div class="w-full border-b border-[#a89f91]/40 mb-1"></div>
+                <span class="font-bold text-[#e9e1dc]">Chanceler Paroquial</span>
+                <span>Registro &amp; Certidão</span>
+              </div>
+              <div class="flex flex-col gap-1 items-center">
+                <div class="w-full border-b border-[#a89f91]/40 mb-1"></div>
+                <span class="font-bold text-[#e9e1dc]">Curador do Tombo</span>
+                <span>Conferência de Inventário</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ----------------------------------------------------
+         VIEW 5: CENTRAL DE BACKUP & TRANSFERÊNCIA
+         ---------------------------------------------------- -->
+    <section id="view-backup" class="hidden p-8 flex flex-col gap-6">
+      
+      <div class="flex flex-col">
+        <div class="flex items-center gap-2 text-xs font-semibold text-[#f2ca50] uppercase tracking-wider mb-1">
+          <span class="material-symbols-outlined text-sm">cloud_sync</span>
+          <span>Sincronização &amp; Custódia de Dados</span>
+        </div>
+        <h1 class="font-serif font-bold text-3xl text-[#e9e1dc] tracking-tight">Central de Backup &amp; Transferência</h1>
+        <p class="text-xs text-[#a89f91] mt-0.5">Exporte e importe todo o banco de dados da aplicação para transferir instantaneamente entre seu celular e este computador.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Card 1: Exportar Backup -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between gap-4">
+          <div class="flex flex-col gap-2">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#d4af37] to-[#f2ca50] flex items-center justify-center text-[#161310] font-bold shadow-md">
+              <span class="material-symbols-outlined text-2xl">download</span>
+            </div>
+            <h2 class="font-serif font-bold text-lg text-[#f4ecd8]">Exportar Arquivo de Backup</h2>
+            <p class="text-xs text-[#a89f91]">Gera um arquivo <code>.json</code> completo contendo todos os cultos, sedes, categorias, itens de patrimônio com fotos em Base64 e preferências litúrgicas.</p>
+          </div>
+
+          <button onclick="BackupService.export()" class="w-full py-3 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#f2ca50] text-[#161310] font-bold text-xs flex items-center justify-center gap-2 shadow-lg hover:brightness-110 active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-base">download</span>
+            <span>Baixar Arquivo Completo (.json)</span>
+          </button>
+        </div>
+
+        <!-- Card 2: Importar Arquivo de Backup -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between gap-4">
+          <div class="flex flex-col gap-2">
+            <div class="w-12 h-12 rounded-xl bg-[#221f1c] border border-[#d4af37]/30 flex items-center justify-center text-[#f2ca50] shadow-md">
+              <span class="material-symbols-outlined text-2xl">upload_file</span>
+            </div>
+            <h2 class="font-serif font-bold text-lg text-[#f4ecd8]">Receber Dados de Outro Aparelho</h2>
+            <p class="text-xs text-[#a89f91]">Selecione o arquivo <code>.json</code> enviado do seu celular Android ou de outro dispositivo para restaurar imediatamente todo o sistema.</p>
+          </div>
+
+          <label class="w-full py-3 rounded-xl bg-[#221f1c] hover:bg-[#2c2722] border border-[#d4af37]/40 text-[#f2ca50] font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all">
+            <span class="material-symbols-outlined text-base">file_open</span>
+            <span>Selecionar Arquivo .json</span>
+            <input type="file" accept=".json,application/json" onchange="BackupService.importFromFile(this)" class="hidden" />
+          </label>
+        </div>
+
+        <!-- Card 3: Transferência via Texto / Clipboard -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between gap-4">
+          <div class="flex flex-col gap-2">
+            <div class="w-12 h-12 rounded-xl bg-[#221f1c] border border-[#d4af37]/30 flex items-center justify-center text-[#e4c285] shadow-md">
+              <span class="material-symbols-outlined text-2xl">content_paste</span>
+            </div>
+            <h2 class="font-serif font-bold text-lg text-[#f4ecd8]">Transferência Direta em Texto</h2>
+            <p class="text-xs text-[#a89f91]">Copie o código JSON integral ou cole aqui diretamente sem precisar fazer download ou upload de arquivos.</p>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <button onclick="BackupService.copyToClipboard()" class="w-full py-2.5 rounded-xl bg-[#2c2722] hover:bg-[#383431] text-[#f2ca50] font-semibold text-xs flex items-center justify-center gap-2 transition-all">
+              <span class="material-symbols-outlined text-sm">content_copy</span>
+              <span>Copiar Backup (Área de Transferência)</span>
+            </button>
+            <button onclick="BackupService.togglePasteBox()" class="w-full py-2 rounded-xl bg-[#100e0b] hover:bg-[#1a1714] text-[#a89f91] text-xs font-semibold flex items-center justify-center gap-1.5 border border-[#d4af37]/20 transition-all">
+              <span class="material-symbols-outlined text-sm">edit_note</span>
+              <span>Colar Código JSON</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Caixa de Colar Texto JSON (Oculta por padrão) -->
+      <div id="paste-backup-container" class="hidden glass-card rounded-2xl p-6 flex flex-col gap-3">
+        <h3 class="font-serif font-bold text-sm text-[#f2ca50] flex items-center gap-2">
+          <span class="material-symbols-outlined text-base">edit_note</span>
+          <span>Colar Dados do Backup JSON</span>
+        </h3>
+        <textarea id="paste-backup-text" rows="5" placeholder="Cole aqui o conteúdo JSON do seu backup..." class="w-full p-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-xs font-mono text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]"></textarea>
+        <button onclick="BackupService.processPastedText()" class="self-end px-5 py-2 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#f2ca50] text-[#161310] font-bold text-xs flex items-center gap-1.5 transition-all">
+          <span class="material-symbols-outlined text-sm">check_circle</span>
+          <span>Processar e Restaurar Dados</span>
+        </button>
+      </div>
+
+      <!-- Guia Rápido de Sincronização Celular <-> PC -->
+      <div class="glass-card rounded-2xl p-6 flex flex-col gap-2 border border-[#d4af37]/20">
+        <h3 class="font-serif font-bold text-base text-[#f2ca50] flex items-center gap-2">
+          <span class="material-symbols-outlined text-base">devices</span>
+          <span>Como Sincronizar entre o Celular e o Computador</span>
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 text-xs text-[#a89f91]">
+          <div class="p-3 rounded-xl bg-[#100e0b]">
+            <strong class="text-[#f4ecd8] block mb-1">1. No Celular:</strong>
+            <p>Abra o aplicativo Agenda Oficial, vá em <em>Central de Backup</em> e clique em <em>Baixar Arquivo</em> ou <em>Compartilhar via WhatsApp</em>.</p>
+          </div>
+          <div class="p-3 rounded-xl bg-[#100e0b]">
+            <strong class="text-[#f4ecd8] block mb-1">2. No Computador:</strong>
+            <p>Receba o arquivo (via WhatsApp Web, Google Drive ou E-mail) e clique aqui em <em>Selecionar Arquivo .json</em>.</p>
+          </div>
+          <div class="p-3 rounded-xl bg-[#100e0b]">
+            <strong class="text-[#f4ecd8] block mb-1">3. Concluído:</strong>
+            <p>Todos os seus cultos, congregações e itens de patrimônio com fotos aparecerão imediatamente na tela do computador!</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ========================================================
+       MODAIS UNIVERSAIS WIDESCREEN
+       ======================================================== -->
+
+  <!-- MODAL: AGENDAR CULTO / EVENTO -->
+  <div id="modal-evento" class="no-print fixed inset-0 z-50 pointer-events-none opacity-0 flex items-center justify-center p-4 transition-opacity duration-300">
+    <div class="absolute inset-0 bg-black/75 backdrop-blur-sm" onclick="EventController.closeModal()"></div>
+    <div class="relative w-full max-w-xl p-6 rounded-2xl bg-[#1a1714] border border-[#d4af37]/35 shadow-2xl z-10 max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between pb-3 border-b border-[#d4af37]/20">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#f2ca50] text-xl">event_available</span>
+          <h3 id="modal-evento-title" class="font-serif font-bold text-lg text-[#f2ca50]">Agendar Culto / Solenidade</h3>
+        </div>
+        <button onclick="EventController.closeModal()" class="p-1.5 rounded-lg text-[#a89f91] hover:text-[#e9e1dc]">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <form onsubmit="EventController.save(event)" class="pt-4 flex flex-col gap-3.5 text-xs">
+        <input type="hidden" id="form-event-id" value="" />
+
+        <div class="flex flex-col gap-1">
+          <label class="font-semibold text-[#a89f91]">Título do Evento Litúrgico *</label>
+          <input type="text" id="form-event-titulo" required placeholder="Ex: Grande Culto de Santa Ceia Geral" class="h-10 px-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="font-semibold text-[#a89f91]">Sede / Congregação *</label>
+            <select id="form-event-congregacao" required class="h-10 px-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]">
+              <!-- Opções injetadas via JS -->
+            </select>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="font-semibold text-[#a89f91]">Categoria *</label>
+            <select id="form-event-categoria" required class="h-10 px-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]">
+              <option value="Culto">Culto Geral</option>
+              <option value="Solenidade">Solenidade / Ceia</option>
+              <option value="Doutrina">Doutrina &amp; Ensino</option>
+              <option value="Juventude">Juventude</option>
+              <option value="Senhoras">Círculo de Oração</option>
+              <option value="Missões">Missões &amp; Evangelismo</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="font-semibold text-[#a89f91]">Data de Início *</label>
+            <input type="date" id="form-event-data" required class="h-10 px-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="font-semibold text-[#a89f91]">Horário de Início *</label>
+            <input type="time" id="form-event-horario" required value="19:30" class="h-10 px-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]" />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="font-semibold text-[#a89f91]">Pregador / Dirigente Titular</label>
+          <input type="text" id="form-event-pregador" placeholder="Ex: Pr. Presidente / Convidado Especial" class="h-10 px-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="font-semibold text-[#a89f91]">Descrição Litúrgica &amp; Observações</label>
+          <textarea id="form-event-descricao" rows="3" placeholder="Informações do rito, hinos, ensaios e liturgia..." class="p-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]"></textarea>
+        </div>
+
+        <div class="pt-3 border-t border-[#d4af37]/20 flex items-center justify-end gap-3">
+          <button type="button" onclick="EventController.closeModal()" class="px-4 py-2 rounded-xl bg-[#221f1c] text-[#a89f91] hover:text-[#e9e1dc]">Cancelar</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#f2ca50] text-[#161310] font-bold shadow-md hover:brightness-110">Salvar Evento</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- MODAL: CADASTRAR BEM NO PATRIMÔNIO -->
+  <div id="modal-patrimonio" class="no-print fixed inset-0 z-50 pointer-events-none opacity-0 flex items-center justify-center p-4 transition-opacity duration-300">
+    <div class="absolute inset-0 bg-black/75 backdrop-blur-sm" onclick="PatrimonioController.closeModal()"></div>
+    <div class="relative w-full max-w-xl p-6 rounded-2xl bg-[#1a1714] border border-[#d4af37]/35 shadow-2xl z-10 max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between pb-3 border-b border-[#d4af37]/20">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#f2ca50] text-xl">auto_stories</span>
+          <h3 class="font-serif font-bold text-lg text-[#f2ca50]">Cadastrar Registro de Tombo</h3>
+        </div>
+        <button onclick="PatrimonioController.closeModal()" class="p-1.5 rounded-lg text-[#a89f91] hover:text-[#e9e1dc]">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <form onsubmit="PatrimonioController.save(event)" class="pt-4 flex flex-col gap-3.5 text-xs">
+        
+        <div class="grid grid-cols-3 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="font-semibold text-[#a89f91]">Nº do Tombo *</label>
+            <input type="text" id="form-pat-tombo" required placeholder="Ex: #045" class="h-10 px-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#f2ca50] font-bold focus:outline-none focus:border-[#f2ca50]" />
+          </div>
+          <div class="col-span-2 flex flex-col gap-1">
+            <label class="font-semibold text-[#a89f91]">Nome do Bem / Alfaia *</label>
+            <input type="text" id="form-pat-nome" required placeholder="Ex: Cálice Litúrgico em Ouro e Prata" class="h-10 px-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="font-semibold text-[#a89f91]">Congregação Guardiã *</label>
+            <select id="form-pat-congregacao" required class="h-10 px-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]">
+              <!-- Injetado via JS -->
+            </select>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="font-semibold text-[#a89f91]">Departamento *</label>
+            <select id="form-pat-depto" required class="h-10 px-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]">
+              <option value="Diaconia / Altar">Diaconia / Altar</option>
+              <option value="Música Sacra">Música Sacra &amp; Louvor</option>
+              <option value="Tesouraria">Tesouraria</option>
+              <option value="Patrimônio Geral">Patrimônio Geral</option>
+              <option value="Educação Cristã">Educação Cristã</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="font-semibold text-[#a89f91]">Ano Aquisição</label>
+            <input type="text" id="form-pat-ano" value="2026" class="h-10 px-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] text-center focus:outline-none focus:border-[#f2ca50]" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="font-semibold text-[#a89f91]">Quantidade</label>
+            <div class="flex items-center h-10 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 overflow-hidden">
+              <button type="button" onclick="PatrimonioController.stepFormQtd(-1)" class="w-8 h-full bg-[#221f1c] text-[#f2ca50] font-bold text-sm">-</button>
+              <input type="number" id="form-pat-qtd" value="1" min="1" class="flex-1 bg-transparent text-center text-[#e9e1dc] font-bold focus:outline-none" />
+              <button type="button" onclick="PatrimonioController.stepFormQtd(1)" class="w-8 h-full bg-[#221f1c] text-[#f2ca50] font-bold text-sm">+</button>
+            </div>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="font-semibold text-[#a89f91]">Guardião / Responsável</label>
+            <input type="text" id="form-pat-guardiao" placeholder="Ex: Diác. Samuel" class="h-10 px-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]" />
+          </div>
+        </div>
+
+        <!-- UPLOAD DE FOTO COM PREVIEW E SALVAMENTO BASE64 -->
+        <div class="flex flex-col gap-1.5 p-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/20">
+          <label class="font-semibold text-[#f2ca50] flex items-center justify-between">
+            <span class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm">photo_camera</span>
+              <span>Fotografia do Bem Sacro (Opcional)</span>
+            </span>
+            <button type="button" id="btn-remove-photo" onclick="PatrimonioController.clearPhotoUpload()" class="hidden text-[10px] text-rose-400 hover:underline">Remover Foto</button>
+          </label>
+          
+          <input type="file" id="form-pat-photo-file" accept="image/*" onchange="PatrimonioController.handlePhotoUpload(this)" class="h-9 p-1 rounded-lg bg-[#1a1714] text-xs text-[#a89f91] file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-[11px] file:font-semibold file:bg-[#d4af37] file:text-[#161310] cursor-pointer" />
+          
+          <!-- Mini Preview da Foto -->
+          <div id="form-pat-photo-preview-container" class="hidden mt-2 relative w-full h-28 rounded-lg overflow-hidden bg-black/50 border border-[#d4af37]/30">
+            <img id="form-pat-photo-preview" src="" class="w-full h-full object-cover" alt="Preview" />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="font-semibold text-[#a89f91]">Descrição Detalhada &amp; Características</label>
+          <textarea id="form-pat-descricao" rows="2" placeholder="Detalhes de metal, tecido, procedência, dimensões e histórico..." class="p-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]"></textarea>
+        </div>
+
+        <div class="pt-3 border-t border-[#d4af37]/20 flex items-center justify-end gap-3">
+          <button type="button" onclick="PatrimonioController.closeModal()" class="px-4 py-2 rounded-xl bg-[#221f1c] text-[#a89f91] hover:text-[#e9e1dc]">Cancelar</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#f2ca50] text-[#161310] font-bold shadow-md hover:brightness-110">Salvar no Livro de Tombo</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- MODAL: RETIFICAR / EDITAR BEM DE PATRIMÔNIO -->
+  <div id="modal-edit-patrimonio" class="no-print fixed inset-0 z-50 pointer-events-none opacity-0 flex items-center justify-center p-4 transition-opacity duration-300">
+    <div class="absolute inset-0 bg-black/75 backdrop-blur-sm" onclick="PatrimonioController.closeEditModal()"></div>
+    <div class="relative w-full max-w-xl p-6 rounded-2xl bg-[#1a1714] border border-[#d4af37]/35 shadow-2xl z-10 max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between pb-3 border-b border-[#d4af37]/20">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#f2ca50] text-xl">edit_note</span>
+          <h3 class="font-serif font-bold text-lg text-[#f2ca50]">Retificar Registro de Tombo</h3>
+        </div>
+        <button onclick="PatrimonioController.closeEditModal()" class="p-1.5 rounded-lg text-[#a89f91] hover:text-[#e9e1dc]">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <form onsubmit="PatrimonioController.saveEdit(event)" class="pt-4 flex flex-col gap-3.5 text-xs">
+        <input type="hidden" id="edit-pat-id" value="" />
+
+        <div class="grid grid-cols-3 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="font-semibold text-[#a89f91]">Nº do Tombo *</label>
+            <input type="text" id="edit-pat-tombo" required class="h-10 px-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#f2ca50] font-bold focus:outline-none focus:border-[#f2ca50]" />
+          </div>
+          <div class="col-span-2 flex flex-col gap-1">
+            <label class="font-semibold text-[#a89f91]">Nome do Bem *</label>
+            <input type="text" id="edit-pat-nome" required class="h-10 px-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="font-semibold text-[#a89f91]">Congregação</label>
+            <select id="edit-pat-congregacao" required class="h-10 px-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]">
+              <!-- Injetado via JS -->
+            </select>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="font-semibold text-[#a89f91]">Departamento</label>
+            <select id="edit-pat-depto" required class="h-10 px-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]">
+              <option value="Diaconia / Altar">Diaconia / Altar</option>
+              <option value="Música Sacra">Música Sacra &amp; Louvor</option>
+              <option value="Tesouraria">Tesouraria</option>
+              <option value="Patrimônio Geral">Patrimônio Geral</option>
+              <option value="Educação Cristã">Educação Cristã</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="font-semibold text-[#a89f91]">Ano</label>
+            <input type="text" id="edit-pat-ano" class="h-10 px-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] text-center focus:outline-none focus:border-[#f2ca50]" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="font-semibold text-[#a89f91]">Quantidade</label>
+            <div class="flex items-center h-10 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 overflow-hidden">
+              <button type="button" onclick="PatrimonioController.stepEditQtd(-1)" class="w-8 h-full bg-[#221f1c] text-[#f2ca50] font-bold text-sm">-</button>
+              <input type="number" id="edit-pat-qtd" min="1" class="flex-1 bg-transparent text-center text-[#e9e1dc] font-bold focus:outline-none" />
+              <button type="button" onclick="PatrimonioController.stepEditQtd(1)" class="w-8 h-full bg-[#221f1c] text-[#f2ca50] font-bold text-sm">+</button>
+            </div>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="font-semibold text-[#a89f91]">Guardião</label>
+            <input type="text" id="edit-pat-guardiao" class="h-10 px-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]" />
+          </div>
+        </div>
+
+        <!-- FOTO EM EDIÇÃO -->
+        <div class="flex flex-col gap-1.5 p-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/20">
+          <label class="font-semibold text-[#f2ca50] flex items-center justify-between">
+            <span class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm">photo_camera</span>
+              <span>Substituir Fotografia</span>
+            </span>
+            <button type="button" id="btn-edit-remove-photo" onclick="PatrimonioController.clearEditPhoto()" class="text-[10px] text-rose-400 hover:underline">Remover Foto</button>
+          </label>
+          <input type="file" id="edit-pat-photo-file" accept="image/*" onchange="PatrimonioController.handleEditPhotoUpload(this)" class="h-9 p-1 rounded-lg bg-[#1a1714] text-xs text-[#a89f91] file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-[11px] file:font-semibold file:bg-[#d4af37] file:text-[#161310] cursor-pointer" />
+          
+          <div id="edit-pat-photo-preview-container" class="mt-2 relative w-full h-28 rounded-lg overflow-hidden bg-black/50 border border-[#d4af37]/30">
+            <img id="edit-pat-photo-preview" src="" class="w-full h-full object-cover" alt="Preview" />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="font-semibold text-[#a89f91]">Descrição &amp; Histórico</label>
+          <textarea id="edit-pat-descricao" rows="2" class="p-3 rounded-xl bg-[#100e0b] border border-[#d4af37]/30 text-[#e9e1dc] focus:outline-none focus:border-[#f2ca50]"></textarea>
+        </div>
+
+        <div class="pt-3 border-t border-[#d4af37]/20 flex items-center justify-between">
+          <button type="button" onclick="PatrimonioController.deleteCurrentEdit()" class="px-3.5 py-2 rounded-xl bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 font-semibold flex items-center gap-1.5 border border-rose-500/30">
+            <span class="material-symbols-outlined text-sm">delete</span>
+            <span>Excluir Bem</span>
+          </button>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="PatrimonioController.closeEditModal()" class="px-4 py-2 rounded-xl bg-[#221f1c] text-[#a89f91] hover:text-[#e9e1dc]">Cancelar</button>
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#f2ca50] text-[#161310] font-bold shadow-md hover:brightness-110">Salvar Alterações</button>
+          </div>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS (CANTO SUPERIOR DIREITO) -->
+  <div id="toast-container" class="fixed top-5 right-5 z-[100] flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ========================================================
+       SCRIPTS JAVASCRIPT: ARQUITETURA DE DADOS & CONTROLADORES
+       ======================================================== -->
+  <script>
+    /**
+     * CHAVES DE LOCALSTORAGE (Totalmente compatíveis com a versão mobile)
+     */
+    const STORAGE_KEYS = {
+      EVENTS: 'agenda_oficial_events',
+      CONGREGATIONS: 'agenda_oficial_congregations',
+      CATEGORIES: 'agenda_oficial_categories',
+      PATRIMONIO: 'agenda_oficial_patrimonio',
+      THEME: 'agenda_oficial_theme'
+    };
+
+    /**
+     * DADOS SEMENTE (SEEDS)
+     */
+    const SEED_CONGREGATIONS = [
+      { id: 'cong-central', nome: 'Congr. Central', responsavel: 'Pr. Presidente', ativa: true },
+      { id: 'cong-vila-nova', nome: 'Congr. Vila Nova', responsavel: 'Ev. Marcos', ativa: true },
+      { id: 'cong-jardim-flores', nome: 'Jardim das Flores', responsavel: 'Pb. Antônio', ativa: true },
+      { id: 'cong-betel-norte', nome: 'Betel Norte', responsavel: 'Pr. Lucas', ativa: true }
+    ];
+
+    const SEED_PATRIMONIO = [
+      {
+        id: 'pat-001',
+        tombo: '#014',
+        nome: 'Cálice Litúrgico Ouro & Prata',
+        descricao: 'Par de cálices cerimoniais para a Santa Ceia Geral em metal nobre cinzelado com base octogonal e incrustações discretas.',
+        congregaçãoNome: 'Congr. Central',
+        congregaçãoId: 'cong-central',
+        qtd: 2,
+        ano: '1978',
+        setor: 'Setor 01 - Centro',
+        depto: 'Diaconia Litúrgica',
+        guardiao: 'Diác. Samuel Viana',
+        foto: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBOUmmgrFL5KLJEp3dtuIpcq2pxiVSQ48QdASWx-t3SQDnBvZjaM4VvTN2mEPz64pOU_-tg6LnoK3GfANj5rwbtHkW8a57wIug6SjKZOZM0kxYZlyzrh0-kEbYaCdrLlLenkgJIYatGXDcv5QYyZOoNyIj0Sg5AilH7S88RYEQcXjIepwDohTlm3Ar8p5tyoPR6gExwgTAcAylPizVUZQmC3K9C-r18kxZH61vtGpsu'
+      },
+      {
+        id: 'pat-002',
+        tombo: '#003',
+        nome: 'Púlpito Entalhado em Jacarandá',
+        descricao: 'Púlpito principal trabalhado à mão com brasão litúrgico e apoio acolchoado para Escrituras Sagradas, peça do patrimônio fundacional.',
+        congregaçãoNome: 'Congr. Central',
+        congregaçãoId: 'cong-central',
+        qtd: 1,
+        ano: '1965',
+        setor: 'Setor 01 - Centro',
+        depto: 'Ministério Pastoral',
+        guardiao: 'Pr. Dirigente',
+        foto: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAXcLe1mPYDlwpNqtzIRgsqrwQYCpHdZroJqRrZMeuPHre3p3Irs2fijj8fiO7uFyAfDhojA147pZqe8iPE1aYWN29hHMw8QtZU6eedOXXVoMOewB0FRWGQi6rMg5LAWdd94s6hMOqER6XOxzhvL8PA_eG1PCgraH4tCUsnQZwu7Ns5aveE1WbX_fvpTd1PVRdjrmTWlgV5RHkvoAj8c0EbBtVhipbjldpBxg0wT197'
+      },
+      {
+        id: 'pat-003',
+        tombo: '#029',
+        nome: 'Arca das Ofertas & Dízimos',
+        descricao: 'Urnas de madeira maciça envernizada com ferragens e tranca quádrupla de latão fundido para guarda de dízimos e ofertas solenes.',
+        congregaçãoNome: 'Congr. Vila Nova',
+        congregaçãoId: 'cong-vila-nova',
+        qtd: 3,
+        ano: '2004',
+        setor: 'Setor 02 - Leste',
+        depto: 'Tesouraria Ministerial',
+        guardiao: 'Ev. Tesoureiro',
+        foto: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCeBluZvjqj74RSe3RjvjlT-PTEq-5s-QR1kDEb6naliZnqjZ0ySwOLWZd8eqv44SsJchIoGEQqU0s816W-90qjLoEidfgGfGE7pktDFReKqAvAZHoAIs3ZJnOOH4gUOg8s_OFlyGmT0BLCQOL8_iuZytkQyqtPlG3qmVRZH1dMOjhwYTzjORiCMepm782fLZXc5Hnb8GIF5udFr5Dm51MDNEPiHThX_41R_grM6Tvn'
+      },
+      {
+        id: 'pat-004',
+        tombo: '#042',
+        nome: 'Toalhas de Linho Egípcio Bordadas',
+        descricao: 'Conjunto para mesa de celebração da Ceia com bordados manuais em fio dourado, bainha aberta e acabamento em renda nobre.',
+        congregaçãoNome: 'Jardim das Flores',
+        congregaçãoId: 'cong-jardim-flores',
+        qtd: 6,
+        ano: '2018',
+        setor: 'Setor 03 - Sul',
+        depto: 'Diaconia Litúrgica',
+        guardiao: 'Irmã Ester Nogueira',
+        foto: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDUVkxX8wObv1Tkm_bl6I2nraMe7aUrMKVTPwE5h2Y6ny-mQEpxipzGrdaVgo8kB8XHS2KVL0zN4__z1h7A7O63_vDMM7C2bP8wqSTYW86Fa6PehrXlWBoukkKSHS7Obo9qMkY5At23U3ieHxRYwnj9Lsm9KT4OxHaEx2Zd5FWh6YU4MdMFquFIvojY45HF6OEnViN0OA4LPfihC8OnQ9lLo3CP4jDlfF6LpJ6ae3WB'
+      }
+    ];
+
+    const SEED_EVENTS = [
+      {
+        id: 'evt-01',
+        titulo: 'Culto de Missões e Evangelização',
+        categoria: 'Missões',
+        congregaçãoId: 'cong-central',
+        congregaçãoNome: 'CONGR. CENTRAL',
+        dataInicio: '2026-11-25',
+        horario: '19:30',
+        descricao: 'Culto solene de missões com relatórios dos campos transculturais e clamor pelos missionários.',
+        pregador: 'Pr. Presidente',
+        destaque: true
+      },
+      {
+        id: 'evt-02',
+        titulo: 'Grande Ceia do Senhor & Investidura',
+        categoria: 'Solenidade',
+        congregaçãoId: 'cong-central',
+        congregaçãoNome: 'CONGR. CENTRAL',
+        dataInicio: '2026-11-29',
+        horario: '18:00',
+        descricao: 'Celebração da Santa Ceia do Senhor com ministração do Corpo e Sangue de Cristo e consagração de diáconos.',
+        pregador: 'Bispo / Pr. Presidente',
+        destaque: true
+      },
+      {
+        id: 'evt-03',
+        titulo: 'Culto da Família & Gratidão',
+        categoria: 'Culto',
+        congregaçãoId: 'cong-vila-nova',
+        congregaçãoNome: 'CONGR. VILA NOVA',
+        dataInicio: '2026-11-26',
+        horario: '19:30',
+        descricao: 'Reunião familiar com oração pelos lares e edificação espiritual nas Escrituras.',
+        pregador: 'Ev. Marcos',
+        destaque: false
+      }
+    ];
+
+    /**
+     * ESTADO GLOBAL DA APLICAÇÃO (APPSTATE)
+     */
+    const AppState = {
+      events: [],
+      congregations: [],
+      patrimonio: [],
+      theme: 'dark-nocturne',
+      currentMonth: new Date(),
+      selectedDateStr: new Date().toISOString().slice(0, 10),
+      selectedEventId: null,
+
+      init() {
+        this.loadStorage();
+        this.applyTheme(this.theme);
+        Router.init();
+        EventController.init();
+        PatrimonioController.init();
+        CongregationController.init();
+        ReportController.init();
+        this.updateKpis();
+
+        // Atalho de teclado CTRL + K para busca global
+        window.addEventListener('keydown', (e) => {
+          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+            e.preventDefault();
+            const input = document.getElementById('global-search-input');
+            if (input) { input.focus(); input.select(); }
+          }
+        });
+      },
+
+      loadStorage() {
+        try {
+          const ev = localStorage.getItem(STORAGE_KEYS.EVENTS);
+          this.events = ev ? JSON.parse(ev) : SEED_EVENTS;
+          const cong = localStorage.getItem(STORAGE_KEYS.CONGREGATIONS);
+          this.congregations = cong ? JSON.parse(cong) : SEED_CONGREGATIONS;
+          const pat = localStorage.getItem(STORAGE_KEYS.PATRIMONIO);
+          this.patrimonio = pat ? JSON.parse(pat) : SEED_PATRIMONIO;
+          const th = localStorage.getItem(STORAGE_KEYS.THEME);
+          if (th) this.theme = th;
+        } catch (e) {
+          this.events = SEED_EVENTS;
+          this.congregations = SEED_CONGREGATIONS;
+          this.patrimonio = SEED_PATRIMONIO;
+        }
+      },
+
+      saveStorage() {
+        try {
+          localStorage.setItem(STORAGE_KEYS.EVENTS, JSON.stringify(this.events));
+          localStorage.setItem(STORAGE_KEYS.CONGREGATIONS, JSON.stringify(this.congregations));
+          localStorage.setItem(STORAGE_KEYS.PATRIMONIO, JSON.stringify(this.patrimonio));
+          localStorage.setItem(STORAGE_KEYS.THEME, this.theme);
+        } catch (e) {}
+        this.updateKpis();
+      },
+
+      updateKpis() {
+        // KPIs da Agenda
+        const kpiEvtTotal = document.getElementById('kpi-agenda-total');
+        if (kpiEvtTotal) kpiEvtTotal.textContent = this.events.length;
+        const kpiDeptos = document.getElementById('kpi-agenda-deptos');
+        if (kpiDeptos) kpiDeptos.textContent = this.events.filter(e => e.categoria !== 'Culto').length;
+        const kpiSedes = document.getElementById('kpi-agenda-sedes');
+        if (kpiSedes) kpiSedes.textContent = this.congregations.length;
+        const kpiPat = document.getElementById('kpi-agenda-patrimonio');
+        if (kpiPat) kpiPat.textContent = this.patrimonio.length;
+
+        // KPIs do Patrimônio
+        const kpiPatTotal = document.getElementById('kpi-pat-total');
+        if (kpiPatTotal) kpiPatTotal.textContent = this.patrimonio.length;
+        const kpiPatUnidades = document.getElementById('kpi-pat-unidades');
+        if (kpiPatUnidades) {
+          const totalQtd = this.patrimonio.reduce((acc, p) => acc + (parseInt(p.qtd, 10) || 1), 0);
+          kpiPatUnidades.textContent = totalQtd;
+        }
+        const kpiPatSedes = document.getElementById('kpi-pat-sedes');
+        if (kpiPatSedes) kpiPatSedes.textContent = this.congregations.length;
+        const kpiPatFotos = document.getElementById('kpi-pat-fotos');
+        if (kpiPatFotos) kpiPatFotos.textContent = this.patrimonio.filter(p => p.foto && p.foto.length > 5).length;
+      },
+
+      applyTheme(themeId) {
+        this.theme = themeId;
+        const html = document.documentElement;
+        const metaTheme = document.getElementById('meta-theme-color');
+        const isDark = themeId.startsWith('dark');
+        
+        if (isDark) {
+          html.classList.add('dark');
+          if (metaTheme) metaTheme.content = '#1a1613';
+        } else {
+          html.classList.remove('dark');
+          if (metaTheme) metaTheme.content = '#f5f5f4';
+        }
+
+        const labelInd = document.getElementById('theme-label-indicator');
+        const iconInd = document.getElementById('theme-icon-indicator');
+        if (labelInd) labelInd.textContent = isDark ? 'Escuro' : 'Claro';
+        if (iconInd) iconInd.textContent = isDark ? 'dark_mode' : 'light_mode';
+      },
+
+      toggleTheme() {
+        if (this.theme.startsWith('dark')) {
+          this.theme = 'light-vintage';
+        } else {
+          this.theme = 'dark-nocturne';
+        }
+        this.applyTheme(this.theme);
+        this.saveStorage();
+        Utils.toast(`Tema alterado: ${this.theme.startsWith('dark') ? 'Modo Escuro' : 'Modo Claro'}`);
+      }
+    };
+
+    /**
+     * ROTEADOR WIDESCREEN DE VISUALIZAÇÕES
+     */
+    const Router = {
+      views: ['agenda', 'patrimonio', 'congregacoes', 'relatorios', 'backup'],
+      currentView: 'agenda',
+
+      init() {
+        this.navigate('agenda');
+      },
+
+      navigate(viewName) {
+        if (!this.views.includes(viewName)) viewName = 'agenda';
+        this.currentView = viewName;
+
+        this.views.forEach(v => {
+          const el = document.getElementById(`view-${v}`);
+          if (el) {
+            if (v === viewName) el.classList.remove('hidden');
+            else el.classList.add('hidden');
+          }
+        });
+
+        // Atualizar pill de navegação na sidebar
+        document.querySelectorAll('.desktop-nav-link').forEach(btn => {
+          if (btn.getAttribute('data-view') === viewName) {
+            btn.classList.add('active-nav-pill');
+            btn.classList.remove('text-[#a89f91]');
+            btn.classList.add('text-[#e9e1dc]');
+          } else {
+            btn.classList.remove('active-nav-pill');
+            btn.classList.add('text-[#a89f91]');
+            btn.classList.remove('text-[#e9e1dc]');
+          }
+        });
+
+        // Trigger updates nos módulos
+        if (viewName === 'agenda') EventController.render();
+        if (viewName === 'patrimonio') PatrimonioController.render();
+        if (viewName === 'congregacoes') CongregationController.render();
+        if (viewName === 'relatorios') ReportController.updatePreview();
+      }
+    };
+
+    /**
+     * CONTROLADOR DA AGENDA & CALENDÁRIO
+     */
+    const EventController = {
+      viewMode: 'mes', // 'mes' ou 'tabela'
+
+      init() {
+        this.populateCongregationsSelect();
+        this.render();
+      },
+
+      populateCongregationsSelect() {
+        const selFilter = document.getElementById('agenda-filter-congregacao');
+        const selForm = document.getElementById('form-event-congregacao');
+        
+        let opts = '<option value="ALL">Todas as Congregações</option>';
+        let formOpts = '';
+
+        AppState.congregations.forEach(c => {
+          opts += `<option value="${c.id}">${c.nome}</option>`;
+          formOpts += `<option value="${c.id}">${c.nome}</option>`;
+        });
+
+        if (selFilter) selFilter.innerHTML = opts;
+        if (selForm) selForm.innerHTML = formOpts;
+      },
+
+      setViewMode(mode) {
+        this.viewMode = mode;
+        const btnMes = document.getElementById('btn-view-mes');
+        const btnTab = document.getElementById('btn-view-tabela');
+        const calContainer = document.getElementById('calendar-matrix-container');
+        const tabContainer = document.getElementById('agenda-table-view-container');
+
+        if (mode === 'mes') {
+          btnMes.classList.add('bg-[#2c2722]', 'text-[#f2ca50]', 'shadow-sm');
+          btnMes.classList.remove('text-[#a89f91]');
+          btnTab.classList.remove('bg-[#2c2722]', 'text-[#f2ca50]', 'shadow-sm');
+          btnTab.classList.add('text-[#a89f91]');
+          calContainer.classList.remove('hidden');
+          tabContainer.classList.add('hidden');
+        } else {
+          btnTab.classList.add('bg-[#2c2722]', 'text-[#f2ca50]', 'shadow-sm');
+          btnTab.classList.remove('text-[#a89f91]');
+          btnMes.classList.remove('bg-[#2c2722]', 'text-[#f2ca50]', 'shadow-sm');
+          btnMes.classList.add('text-[#a89f91]');
+          calContainer.classList.add('hidden');
+          tabContainer.classList.remove('hidden');
+        }
+        this.render();
+      },
+
+      changeMonth(delta) {
+        AppState.currentMonth.setMonth(AppState.currentMonth.getMonth() + delta);
+        this.render();
+      },
+
+      goToToday() {
+        AppState.currentMonth = new Date();
+        AppState.selectedDateStr = new Date().toISOString().slice(0, 10);
+        this.render();
+      },
+
+      filterByCongregation(congId) {
+        this.filterCongId = congId;
+        this.render();
+      },
+
+      render() {
+        const y = AppState.currentMonth.getFullYear();
+        const m = AppState.currentMonth.getMonth();
+        
+        const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+        const displayEl = document.getElementById('current-month-display');
+        if (displayEl) displayEl.textContent = `${monthNames[m]} ${y}`;
+
+        this.renderCalendarMatrix(y, m);
+        this.renderTable();
+        this.renderOrderOfDay();
+        this.renderDossier();
+      },
+
+      renderCalendarMatrix(year, month) {
+        const grid = document.getElementById('calendar-days-grid');
+        if (!grid) return;
+
+        grid.innerHTML = '';
+
+        const firstDayIndex = new Date(year, month, 1).getDay(); // 0 (Dom) a 6 (Sab)
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+        const todayStr = new Date().toISOString().slice(0, 10);
+
+        // Dias do mês anterior (apagados)
+        for (let i = firstDayIndex - 1; i >= 0; i--) {
+          const dayNum = daysInPrevMonth - i;
+          const dayEl = document.createElement('div');
+          dayEl.className = 'h-24 p-2 rounded-lg bg-[#100e0b]/40 opacity-35 flex flex-col justify-between';
+          dayEl.innerHTML = `<span class="text-[11px] text-[#a89f91]">${dayNum}</span>`;
+          grid.appendChild(dayEl);
+        }
+
+        // Dias do mês corrente
+        for (let d = 1; d <= daysInMonth; d++) {
+          const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+          const isToday = dateStr === todayStr;
+          const isSelected = dateStr === AppState.selectedDateStr;
+
+          // Eventos deste dia
+          let dayEvents = AppState.events.filter(e => e.dataInicio === dateStr);
+          if (this.filterCongId && this.filterCongId !== 'ALL') {
+            dayEvents = dayEvents.filter(e => e.congregaçãoId === this.filterCongId);
+          }
+
+          const dayEl = document.createElement('div');
+          dayEl.onclick = () => {
+            AppState.selectedDateStr = dateStr;
+            if (dayEvents.length > 0) AppState.selectedEventId = dayEvents[0].id;
+            EventController.render();
+          };
+
+          let bgClasses = 'bg-[#1a1714] hover:bg-[#221f1c] border border-[#d4af37]/15';
+          if (isSelected) bgClasses = 'bg-[#2c2722] border-2 border-[#f2ca50] shadow-lg';
+          else if (isToday) bgClasses = 'bg-[#1f1a14] border border-[#d4af37]/50';
+
+          dayEl.className = `h-24 p-2 rounded-xl transition-all cursor-pointer flex flex-col justify-between overflow-hidden ${bgClasses}`;
+
+          let eventsPillHtml = '';
+          if (dayEvents.length > 0) {
+            const first = dayEvents[0];
+            eventsPillHtml = `
+              <div class="flex flex-col gap-0.5">
+                <div class="px-1.5 py-0.5 rounded bg-[#100e0b] text-[#f2ca50] text-[9.5px] font-semibold truncate border border-[#d4af37]/25">
+                  ${first.titulo}
+                </div>
+                <div class="text-[9px] text-[#a89f91] font-mono flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#f2ca50]"></span>
+                  <span>${first.horario || '19:30'}</span>
+                  ${dayEvents.length > 1 ? `<span class="text-[8px] text-[#d4af37] font-bold">+${dayEvents.length - 1}</span>` : ''}
+                </div>
+              </div>
+            `;
+          }
+
+          dayEl.innerHTML = `
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold ${isSelected ? 'text-[#f2ca50]' : (isToday ? 'text-[#f7dc78]' : 'text-[#e9e1dc]')}">${d}</span>
+              ${isToday ? `<span class="px-1 py-0.2 rounded bg-[#f2ca50] text-[#161310] font-bold text-[8px]">HOJE</span>` : ''}
+            </div>
+            ${eventsPillHtml}
+          `;
+
+          grid.appendChild(dayEl);
+        }
+      },
+
+      renderTable() {
+        const tbody = document.getElementById('agenda-table-body');
+        if (!tbody) return;
+
+        let events = [...AppState.events].sort((a, b) => (a.dataInicio || '').localeCompare(b.dataInicio || ''));
+        if (this.filterCongId && this.filterCongId !== 'ALL') {
+          events = events.filter(e => e.congregaçãoId === this.filterCongId);
+        }
+
+        if (events.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-xs text-[#a89f91]">Nenhum culto agendado com os critérios selecionados.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = events.map(e => `
+          <tr class="hover:bg-[#221f1c]/60 cursor-pointer transition-colors" onclick="EventController.selectEvent('${e.id}')">
+            <td class="py-2.5 px-3 font-mono text-[#f2ca50] font-semibold">${e.dataInicio} <span class="text-[#a89f91] text-[10px]">• ${e.horario || '19:30'}</span></td>
+            <td class="py-2.5 px-3 font-bold text-[#e9e1dc]">${e.titulo}</td>
+            <td class="py-2.5 px-3 text-[#e4c285]">${e.congregaçãoNome || 'Central'}</td>
+            <td class="py-2.5 px-3 text-[#a89f91]">${e.pregador || 'Pr. Titular'}</td>
+            <td class="py-2.5 px-3 text-center">
+              <span class="px-2 py-0.5 rounded bg-[#100e0b] text-[10px] text-[#d4af37] border border-[#d4af37]/25 font-mono">
+                ${Utils.calculateDaysDiff(e.dataInicio)}
+              </span>
+            </td>
+            <td class="py-2.5 px-3 text-right">
+              <button onclick="event.stopPropagation(); EventController.editEvent('${e.id}')" class="p-1 text-[#f2ca50] hover:scale-110" title="Editar"><span class="material-symbols-outlined text-base">edit</span></button>
+              <button onclick="event.stopPropagation(); EventController.deleteEvent('${e.id}')" class="p-1 text-rose-400 hover:scale-110" title="Excluir"><span class="material-symbols-outlined text-base">delete</span></button>
+            </td>
+          </tr>
+        `).join('');
+      },
+
+      renderOrderOfDay() {
+        const titleEl = document.getElementById('order-of-day-title');
+        const subtitleEl = document.getElementById('order-of-day-subtitle');
+        const container = document.getElementById('order-of-day-events');
+        if (!container) return;
+
+        const dateStr = AppState.selectedDateStr;
+        if (titleEl) titleEl.textContent = `Ordem Litúrgica • ${Utils.formatDateBr(dateStr)}`;
+
+        const dayEvents = AppState.events.filter(e => e.dataInicio === dateStr);
+        if (subtitleEl) subtitleEl.textContent = `${dayEvents.length} solenidade(s) registrada(s) para este dia`;
+
+        if (dayEvents.length === 0) {
+          container.innerHTML = `
+            <div class="p-4 rounded-xl bg-[#100e0b] border border-[#d4af37]/10 text-center text-xs text-[#a89f91]">
+              Nenhum culto agendado para esta data. Clique em <em>+ Inserir Neste Dia</em> acima para agendar.
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = dayEvents.map(e => `
+          <div onclick="EventController.selectEvent('${e.id}')" class="flex items-center justify-between p-3 rounded-xl bg-[#100e0b] hover:bg-[#1f1a14] border border-[#d4af37]/20 transition-all cursor-pointer group">
+            <div class="flex items-center gap-3">
+              <div class="px-2 py-1 rounded bg-[#2c2722] text-[#f2ca50] font-mono font-bold text-xs">
+                ${e.horario || '19:30'}
+              </div>
+              <div class="flex flex-col">
+                <span class="font-bold text-[#e9e1dc] text-xs group-hover:text-[#f2ca50] transition-colors">${e.titulo}</span>
+                <span class="text-[11px] text-[#a89f91]">${e.congregaçãoNome || 'Central'} • Celebrante: ${e.pregador || 'Pr. Presidente'}</span>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-sm text-[#d4af37] opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+          </div>
+        `).join('');
+      },
+
+      selectEvent(id) {
+        AppState.selectedEventId = id;
+        this.renderDossier();
+      },
+
+      renderDossier() {
+        let evt = AppState.events.find(e => e.id === AppState.selectedEventId);
+        if (!evt && AppState.events.length > 0) evt = AppState.events[0];
+
+        const titleEl = document.getElementById('dossier-titulo');
+        const descEl = document.getElementById('dossier-descricao');
+        const pregadorEl = document.getElementById('dossier-pregador');
+        const dataEl = document.getElementById('dossier-data');
+        const congPill = document.getElementById('dossier-congregacao-pill');
+        const horarioPill = document.getElementById('dossier-horario-pill');
+
+        if (!evt) {
+          if (titleEl) titleEl.textContent = 'Nenhum Evento';
+          if (descEl) descEl.textContent = 'Agende um novo culto para consultar a ficha canônica.';
+          return;
+        }
+
+        if (titleEl) titleEl.textContent = evt.titulo;
+        if (descEl) descEl.textContent = evt.descricao || 'Celebração litúrgica regular da congregação.';
+        if (pregadorEl) pregadorEl.textContent = evt.pregador || 'Pr. Titular';
+        if (dataEl) dataEl.textContent = evt.dataInicio;
+        if (congPill) congPill.textContent = evt.congregaçãoNome || 'CONGR. CENTRAL';
+        if (horarioPill) horarioPill.textContent = evt.horario || '19:30';
+      },
+
+      openCreateModal() {
+        document.getElementById('form-event-id').value = '';
+        document.getElementById('form-event-titulo').value = '';
+        document.getElementById('form-event-data').value = AppState.selectedDateStr || new Date().toISOString().slice(0, 10);
+        document.getElementById('form-event-horario').value = '19:30';
+        document.getElementById('form-event-pregador').value = '';
+        document.getElementById('form-event-descricao').value = '';
+        document.getElementById('modal-evento-title').textContent = 'Agendar Culto / Solenidade';
+
+        const modal = document.getElementById('modal-evento');
+        modal.classList.remove('pointer-events-none', 'opacity-0');
+        modal.classList.add('pointer-events-auto', 'opacity-100');
+      },
+
+      editSelected() {
+        if (!AppState.selectedEventId) return;
+        this.editEvent(AppState.selectedEventId);
+      },
+
+      editEvent(id) {
+        const evt = AppState.events.find(e => e.id === id);
+        if (!evt) return;
+
+        document.getElementById('form-event-id').value = evt.id;
+        document.getElementById('form-event-titulo').value = evt.titulo;
+        document.getElementById('form-event-data').value = evt.dataInicio;
+        document.getElementById('form-event-horario').value = evt.horario || '19:30';
+        document.getElementById('form-event-congregacao').value = evt.congregaçãoId || '';
+        document.getElementById('form-event-categoria').value = evt.categoria || 'Culto';
+        document.getElementById('form-event-pregador').value = evt.pregador || '';
+        document.getElementById('form-event-descricao').value = evt.descricao || '';
+        document.getElementById('modal-evento-title').textContent = 'Editar Solenidade Litúrgica';
+
+        const modal = document.getElementById('modal-evento');
+        modal.classList.remove('pointer-events-none', 'opacity-0');
+        modal.classList.add('pointer-events-auto', 'opacity-100');
+      },
+
+      save(event) {
+        event.preventDefault();
+        const id = document.getElementById('form-event-id').value;
+        const titulo = document.getElementById('form-event-titulo').value.trim();
+        const congSelect = document.getElementById('form-event-congregacao');
+        const congId = congSelect.value;
+        const congNome = congSelect.options[congSelect.selectedIndex]?.text || 'Central';
+        const categoria = document.getElementById('form-event-categoria').value;
+        const dataInicio = document.getElementById('form-event-data').value;
+        const horario = document.getElementById('form-event-horario').value;
+        const pregador = document.getElementById('form-event-pregador').value.trim();
+        const descricao = document.getElementById('form-event-descricao').value.trim();
+
+        if (!titulo || !dataInicio) return;
+
+        if (id) {
+          const idx = AppState.events.findIndex(e => e.id === id);
+          if (idx !== -1) {
+            AppState.events[idx] = { ...AppState.events[idx], titulo, congregaçãoId: congId, congregaçãoNome: congNome, categoria, dataInicio, horario, pregador, descricao };
+            Utils.toast('Solenidade atualizada com sucesso!');
+          }
+        } else {
+          const newEvt = {
+            id: 'evt-' + Date.now(),
+            titulo,
+            congregaçãoId: congId,
+            congregaçãoNome: congNome,
+            categoria,
+            dataInicio,
+            horario,
+            pregador,
+            descricao,
+            destaque: false
+          };
+          AppState.events.push(newEvt);
+          AppState.selectedEventId = newEvt.id;
+          Utils.toast('Novo evento agendado com sucesso!');
+        }
+
+        AppState.saveStorage();
+        this.closeModal();
+        this.render();
+      },
+
+      duplicateSelected() {
+        const evt = AppState.events.find(e => e.id === AppState.selectedEventId);
+        if (!evt) return;
+
+        const clone = {
+          ...evt,
+          id: 'evt-' + Date.now(),
+          titulo: evt.titulo + ' (Cópia)'
+        };
+        AppState.events.push(clone);
+        AppState.selectedEventId = clone.id;
+        AppState.saveStorage();
+        this.render();
+        Utils.toast('Evento duplicado com sucesso!');
+      },
+
+      deleteSelected() {
+        if (!AppState.selectedEventId) return;
+        this.deleteEvent(AppState.selectedEventId);
+      },
+
+      deleteEvent(id) {
+        if (!confirm('Deseja realmente remover esta solenidade da agenda?')) return;
+        AppState.events = AppState.events.filter(e => e.id !== id);
+        if (AppState.selectedEventId === id) AppState.selectedEventId = null;
+        AppState.saveStorage();
+        this.render();
+        Utils.toast('Evento removido da agenda.');
+      },
+
+      closeModal() {
+        const modal = document.getElementById('modal-evento');
+        modal.classList.remove('pointer-events-auto', 'opacity-100');
+        modal.classList.add('pointer-events-none', 'opacity-0');
+      }
+    };
+
+    /**
+     * CONTROLADOR DO PATRIMÔNIO (LIVRO DO TOMBO)
+     */
+    const PatrimonioController = {
+      viewMode: 'grade', // 'grade' ou 'tabela'
+      tempPhotoBase64: '',
+      editTempPhotoBase64: '',
+
+      init() {
+        this.populateSelects();
+        this.render();
+      },
+
+      populateSelects() {
+        const selFilterSede = document.getElementById('pat-filter-sede');
+        const selFormSede = document.getElementById('form-pat-congregacao');
+        const selEditSede = document.getElementById('edit-pat-congregacao');
+
+        let optsFilter = '<option value="ALL">Todas as Congregações</option>';
+        let optsForm = '';
+
+        AppState.congregations.forEach(c => {
+          optsFilter += `<option value="${c.id}">${c.nome}</option>`;
+          optsForm += `<option value="${c.id}">${c.nome}</option>`;
+        });
+
+        if (selFilterSede) selFilterSede.innerHTML = optsFilter;
+        if (selFormSede) selFormSede.innerHTML = optsForm;
+        if (selEditSede) selEditSede.innerHTML = optsForm;
+
+        // Anos disponíveis
+        const anos = [...new Set(AppState.patrimonio.map(p => p.ano).filter(Boolean))].sort().reverse();
+        const selAno = document.getElementById('pat-filter-ano');
+        if (selAno) {
+          selAno.innerHTML = '<option value="ALL">Todos os Anos</option>' + anos.map(a => `<option value="${a}">${a}</option>`).join('');
+        }
+      },
+
+      setViewMode(mode) {
+        this.viewMode = mode;
+        const btnGrade = document.getElementById('btn-pat-view-grade');
+        const btnTabela = document.getElementById('btn-pat-view-tabela');
+        const gridView = document.getElementById('patrimonio-grid-view');
+        const tableView = document.getElementById('patrimonio-table-view');
+
+        if (mode === 'grade') {
+          btnGrade.classList.add('bg-[#2c2722]', 'text-[#f2ca50]', 'shadow-sm');
+          btnGrade.classList.remove('text-[#a89f91]');
+          btnTabela.classList.remove('bg-[#2c2722]', 'text-[#f2ca50]', 'shadow-sm');
+          btnTabela.classList.add('text-[#a89f91]');
+          gridView.classList.remove('hidden');
+          tableView.classList.add('hidden');
+        } else {
+          btnTabela.classList.add('bg-[#2c2722]', 'text-[#f2ca50]', 'shadow-sm');
+          btnTabela.classList.remove('text-[#a89f91]');
+          btnGrade.classList.remove('bg-[#2c2722]', 'text-[#f2ca50]', 'shadow-sm');
+          btnGrade.classList.add('text-[#a89f91]');
+          tableView.classList.remove('hidden');
+          gridView.classList.add('hidden');
+        }
+        this.render();
+      },
+
+      applyFilters() {
+        this.render();
+      },
+
+      getFilteredList() {
+        const ano = document.getElementById('pat-filter-ano')?.value || 'ALL';
+        const sede = document.getElementById('pat-filter-sede')?.value || 'ALL';
+        const depto = document.getElementById('pat-filter-depto')?.value || 'ALL';
+        const sort = document.getElementById('pat-filter-sort')?.value || 'tombo_asc';
+
+        let list = [...AppState.patrimonio];
+
+        if (ano !== 'ALL') list = list.filter(p => p.ano === ano);
+        if (sede !== 'ALL') list = list.filter(p => p.congregaçãoId === sede);
+        if (depto !== 'ALL') list = list.filter(p => p.depto === depto);
+
+        if (sort === 'tombo_asc') list.sort((a, b) => (a.tombo || '').localeCompare(b.tombo || ''));
+        else if (sort === 'ano_desc') list.sort((a, b) => (b.ano || '').localeCompare(a.ano || ''));
+        else if (sort === 'ano_asc') list.sort((a, b) => (a.ano || '').localeCompare(b.ano || ''));
+        else if (sort === 'nome_asc') list.sort((a, b) => (a.nome || '').localeCompare(b.nome || ''));
+        else if (sort === 'qtd_desc') list.sort((a, b) => (parseInt(b.qtd, 10) || 0) - (parseInt(a.qtd, 10) || 0));
+
+        return list;
+      },
+
+      render() {
+        const list = this.getFilteredList();
+        this.renderGrid(list);
+        this.renderTable(list);
+        AppState.updateKpis();
+      },
+
+      renderGrid(list) {
+        const grid = document.getElementById('patrimonio-grid-view');
+        if (!grid) return;
+
+        if (list.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full py-12 text-center text-xs text-[#a89f91] glass-card rounded-2xl">
+              Nenhum item do patrimônio encontrado com os filtros selecionados.
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = list.map(item => `
+          <div class="glass-card glass-card-hover rounded-2xl p-4 flex flex-col justify-between transition-all duration-300">
+            
+            <div class="flex flex-col gap-3">
+              <!-- Foto do Bem ou Placeholder -->
+              <div class="relative w-full h-44 rounded-xl overflow-hidden bg-[#100e0b]">
+                <img src="${item.foto || 'logo_dark.png'}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" alt="${item.nome}" onerror="this.onerror=null; this.src='icon-512.png';" />
+                <div class="absolute inset-0 bg-gradient-to-t from-[#161310] via-transparent to-transparent"></div>
+                <div class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded bg-[#100e0b]/90 text-[10px] font-bold text-[#f2ca50] border border-[#d4af37]/30 shadow-md">
+                  ${item.tombo || '#000'}
+                </div>
+                <div class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded bg-[#2c2722]/90 text-[10px] font-semibold text-[#e4c285]">
+                  Ano ${item.ano || '---'}
+                </div>
+              </div>
+
+              <!-- Título & Descrição -->
+              <div class="flex flex-col gap-1">
+                <h3 class="font-serif font-bold text-base text-[#f4ecd8] leading-tight line-clamp-1">${item.nome}</h3>
+                <p class="text-xs text-[#a89f91] line-clamp-2">${item.descricao || 'Alfaia sacra tombada sob custódia perpétua.'}</p>
+              </div>
+
+              <!-- Metadados -->
+              <div class="flex flex-col gap-1 text-[11px] pt-1 border-t border-[#d4af37]/15">
+                <div class="flex items-center justify-between">
+                  <span class="text-[#a89f91]">Congregação:</span>
+                  <strong class="text-[#e9e1dc]">${item.congregaçãoNome || 'Central'}</strong>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-[#a89f91]">Departamento:</span>
+                  <span class="text-[#f2ca50]">${item.depto || 'Altar'}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-[#a89f91]">Guardião:</span>
+                  <span class="text-[#e4c285]">${item.guardiao || 'Zelador'}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stepper de Quantidade & Ações Rápidas -->
+            <div class="pt-3 mt-3 border-t border-[#d4af37]/15 flex items-center justify-between gap-2">
+              <div class="flex items-center h-8 rounded-lg bg-[#100e0b] border border-[#d4af37]/30 overflow-hidden">
+                <button onclick="PatrimonioController.incrementDirect('${item.id}', -1)" class="w-7 h-full bg-[#221f1c] hover:bg-[#2c2722] text-[#f2ca50] font-bold text-xs" title="Reduzir">-</button>
+                <span class="px-2 text-xs font-bold text-[#e9e1dc] font-mono">${item.qtd || 1} un</span>
+                <button onclick="PatrimonioController.incrementDirect('${item.id}', 1)" class="w-7 h-full bg-[#221f1c] hover:bg-[#2c2722] text-[#f2ca50] font-bold text-xs" title="Adicionar">+</button>
+              </div>
+
+              <div class="flex items-center gap-1.5">
+                <button onclick="PatrimonioController.openEditModal('${item.id}')" class="px-3 py-1.5 rounded-lg bg-[#2c2722] hover:bg-[#383431] text-xs font-semibold text-[#f2ca50] flex items-center gap-1 transition-all">
+                  <span class="material-symbols-outlined text-sm">edit</span>
+                  <span>Retificar</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        `).join('');
+      },
+
+      renderTable(list) {
+        const tbody = document.getElementById('patrimonio-table-body');
+        if (!tbody) return;
+
+        if (list.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-xs text-[#a89f91]">Nenhum bem de patrimônio para exibir.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = list.map(item => `
+          <tr class="hover:bg-[#221f1c]/60 transition-colors">
+            <td class="py-2.5 px-3">
+              <img src="${item.foto || 'icon-192.png'}" class="w-9 h-9 rounded-lg object-cover border border-[#d4af37]/30" alt="" onerror="this.onerror=null; this.src='icon-192.png';" />
+            </td>
+            <td class="py-2.5 px-3 font-mono font-bold text-[#f2ca50]">${item.tombo || '#000'}</td>
+            <td class="py-2.5 px-3 font-bold text-[#e9e1dc]">${item.nome}</td>
+            <td class="py-2.5 px-3 text-[#e4c285]">${item.congregaçãoNome || 'Central'}</td>
+            <td class="py-2.5 px-3 text-[#a89f91]">${item.depto || 'Altar'}</td>
+            <td class="py-2.5 px-3 text-center text-[#e9e1dc] font-mono">${item.ano || '---'}</td>
+            <td class="py-2.5 px-3 text-center">
+              <div class="inline-flex items-center h-7 rounded bg-[#100e0b] border border-[#d4af37]/25 overflow-hidden">
+                <button onclick="PatrimonioController.incrementDirect('${item.id}', -1)" class="px-2 h-full bg-[#221f1c] text-[#f2ca50] text-xs font-bold">-</button>
+                <span class="px-2 text-xs font-mono font-bold text-[#e9e1dc]">${item.qtd || 1}</span>
+                <button onclick="PatrimonioController.incrementDirect('${item.id}', 1)" class="px-2 h-full bg-[#221f1c] text-[#f2ca50] text-xs font-bold">+</button>
+              </div>
+            </td>
+            <td class="py-2.5 px-3 text-right">
+              <button onclick="PatrimonioController.openEditModal('${item.id}')" class="p-1 text-[#f2ca50] hover:scale-110" title="Retificar Registro"><span class="material-symbols-outlined text-base">edit</span></button>
+            </td>
+          </tr>
+        `).join('');
+      },
+
+      incrementDirect(id, delta) {
+        const item = AppState.patrimonio.find(p => p.id === id);
+        if (item) {
+          item.qtd = Math.max(1, (parseInt(item.qtd, 10) || 1) + delta);
+          AppState.saveStorage();
+          this.render();
+        }
+      },
+
+      stepFormQtd(delta) {
+        const input = document.getElementById('form-pat-qtd');
+        if (input) input.value = Math.max(1, (parseInt(input.value, 10) || 1) + delta);
+      },
+
+      stepEditQtd(delta) {
+        const input = document.getElementById('edit-pat-qtd');
+        if (input) input.value = Math.max(1, (parseInt(input.value, 10) || 1) + delta);
+      },
+
+      handlePhotoUpload(input) {
+        if (input.files && input.files[0]) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.tempPhotoBase64 = e.target.result;
+            const preview = document.getElementById('form-pat-photo-preview');
+            const container = document.getElementById('form-pat-photo-preview-container');
+            const btnRemove = document.getElementById('btn-remove-photo');
+            if (preview) preview.src = e.target.result;
+            if (container) container.classList.remove('hidden');
+            if (btnRemove) btnRemove.classList.remove('hidden');
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      },
+
+      clearPhotoUpload() {
+        this.tempPhotoBase64 = '';
+        const input = document.getElementById('form-pat-photo-file');
+        const container = document.getElementById('form-pat-photo-preview-container');
+        const btnRemove = document.getElementById('btn-remove-photo');
+        if (input) input.value = '';
+        if (container) container.classList.add('hidden');
+        if (btnRemove) btnRemove.classList.add('hidden');
+      },
+
+      handleEditPhotoUpload(input) {
+        if (input.files && input.files[0]) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.editTempPhotoBase64 = e.target.result;
+            const preview = document.getElementById('edit-pat-photo-preview');
+            const container = document.getElementById('edit-pat-photo-preview-container');
+            if (preview) preview.src = e.target.result;
+            if (container) container.classList.remove('hidden');
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      },
+
+      clearEditPhoto() {
+        this.editTempPhotoBase64 = '';
+        const container = document.getElementById('edit-pat-photo-preview-container');
+        const input = document.getElementById('edit-pat-photo-file');
+        if (container) container.classList.add('hidden');
+        if (input) input.value = '';
+      },
+
+      openCreateModal() {
+        document.getElementById('form-pat-tombo').value = '#' + String(AppState.patrimonio.length + 1).padStart(3, '0');
+        document.getElementById('form-pat-nome').value = '';
+        document.getElementById('form-pat-ano').value = '2026';
+        document.getElementById('form-pat-qtd').value = '1';
+        document.getElementById('form-pat-guardiao').value = '';
+        document.getElementById('form-pat-descricao').value = '';
+        this.clearPhotoUpload();
+
+        const modal = document.getElementById('modal-patrimonio');
+        modal.classList.remove('pointer-events-none', 'opacity-0');
+        modal.classList.add('pointer-events-auto', 'opacity-100');
+      },
+
+      closeModal() {
+        const modal = document.getElementById('modal-patrimonio');
+        modal.classList.remove('pointer-events-auto', 'opacity-100');
+        modal.classList.add('pointer-events-none', 'opacity-0');
+      },
+
+      save(event) {
+        event.preventDefault();
+        const tombo = document.getElementById('form-pat-tombo').value.trim();
+        const nome = document.getElementById('form-pat-nome').value.trim();
+        const congSelect = document.getElementById('form-pat-congregacao');
+        const congId = congSelect.value;
+        const congNome = congSelect.options[congSelect.selectedIndex]?.text || 'Central';
+        const depto = document.getElementById('form-pat-depto').value;
+        const ano = document.getElementById('form-pat-ano').value.trim();
+        const qtd = parseInt(document.getElementById('form-pat-qtd').value, 10) || 1;
+        const guardiao = document.getElementById('form-pat-guardiao').value.trim();
+        const descricao = document.getElementById('form-pat-descricao').value.trim();
+
+        if (!nome) return;
+
+        const newItem = {
+          id: 'pat-' + Date.now(),
+          tombo,
+          nome,
+          descricao,
+          congregaçãoId: congId,
+          congregaçãoNome: congNome,
+          depto,
+          ano,
+          qtd,
+          guardiao,
+          foto: this.tempPhotoBase64 || ''
+        };
+
+        AppState.patrimonio.unshift(newItem);
+        AppState.saveStorage();
+        this.populateSelects();
+        this.closeModal();
+        this.render();
+        Utils.toast('Novo bem cadastrado no Livro de Tombo!');
+      },
+
+      openEditModal(id) {
+        const item = AppState.patrimonio.find(p => p.id === id);
+        if (!item) return;
+
+        document.getElementById('edit-pat-id').value = item.id;
+        document.getElementById('edit-pat-tombo').value = item.tombo || '';
+        document.getElementById('edit-pat-nome').value = item.nome || '';
+        document.getElementById('edit-pat-congregacao').value = item.congregaçãoId || '';
+        document.getElementById('edit-pat-depto').value = item.depto || 'Diaconia / Altar';
+        document.getElementById('edit-pat-ano').value = item.ano || '';
+        document.getElementById('edit-pat-qtd').value = item.qtd || 1;
+        document.getElementById('edit-pat-guardiao').value = item.guardiao || '';
+        document.getElementById('edit-pat-descricao').value = item.descricao || '';
+
+        const previewContainer = document.getElementById('edit-pat-photo-preview-container');
+        const previewImg = document.getElementById('edit-pat-photo-preview');
+        this.editTempPhotoBase64 = item.foto || '';
+
+        if (item.foto) {
+          previewImg.src = item.foto;
+          previewContainer.classList.remove('hidden');
+        } else {
+          previewContainer.classList.add('hidden');
+        }
+
+        const modal = document.getElementById('modal-edit-patrimonio');
+        modal.classList.remove('pointer-events-none', 'opacity-0');
+        modal.classList.add('pointer-events-auto', 'opacity-100');
+      },
+
+      closeEditModal() {
+        const modal = document.getElementById('modal-edit-patrimonio');
+        modal.classList.remove('pointer-events-auto', 'opacity-100');
+        modal.classList.add('pointer-events-none', 'opacity-0');
+      },
+
+      saveEdit(event) {
+        event.preventDefault();
+        const id = document.getElementById('edit-pat-id').value;
+        const item = AppState.patrimonio.find(p => p.id === id);
+        if (!item) return;
+
+        const congSelect = document.getElementById('edit-pat-congregacao');
+
+        item.tombo = document.getElementById('edit-pat-tombo').value.trim();
+        item.nome = document.getElementById('edit-pat-nome').value.trim();
+        item.congregaçãoId = congSelect.value;
+        item.congregaçãoNome = congSelect.options[congSelect.selectedIndex]?.text || item.congregaçãoNome;
+        item.depto = document.getElementById('edit-pat-depto').value;
+        item.ano = document.getElementById('edit-pat-ano').value.trim();
+        item.qtd = parseInt(document.getElementById('edit-pat-qtd').value, 10) || 1;
+        item.guardiao = document.getElementById('edit-pat-guardiao').value.trim();
+        item.descricao = document.getElementById('edit-pat-descricao').value.trim();
+        item.foto = this.editTempPhotoBase64 || item.foto;
+
+        AppState.saveStorage();
+        this.populateSelects();
+        this.closeEditModal();
+        this.render();
+        Utils.toast('Registro retificado com sucesso!');
+      },
+
+      deleteCurrentEdit() {
+        const id = document.getElementById('edit-pat-id').value;
+        if (!confirm('Deseja realmente excluir este bem do Livro de Tombo?')) return;
+        AppState.patrimonio = AppState.patrimonio.filter(p => p.id !== id);
+        AppState.saveStorage();
+        this.populateSelects();
+        this.closeEditModal();
+        this.render();
+        Utils.toast('Item de patrimônio removido.');
+      }
+    };
+
+    /**
+     * CONTROLADOR DAS CONGREGAÇÕES & SEDES
+     */
+    const CongregationController = {
+      init() {
+        this.render();
+      },
+
+      render() {
+        const container = document.getElementById('congregacoes-cards-container');
+        if (!container) return;
+
+        const others = AppState.congregations.filter(c => c.id !== 'cong-central');
+
+        container.innerHTML = others.map(c => {
+          const eventsCount = AppState.events.filter(e => e.congregaçãoId === c.id).length;
+          const patCount = AppState.patrimonio.filter(p => p.congregaçãoId === c.id).length;
+
+          return `
+            <div class="glass-card glass-card-hover rounded-2xl p-5 flex flex-col justify-between transition-all">
+              <div class="flex flex-col gap-2.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-mono uppercase text-[#a89f91]">Filial Sufragânea</span>
+                  <span class="px-2 py-0.5 rounded bg-[#2c2722] text-[#f2ca50] text-[10px] font-bold">Ativa</span>
+                </div>
+                <h3 class="font-serif font-bold text-lg text-[#f4ecd8]">${c.nome}</h3>
+                <p class="text-xs text-[#a89f91]">Dirigente Responsável: <strong class="text-[#e4c285]">${c.responsavel || 'Dirigente'}</strong></p>
+
+                <div class="grid grid-cols-2 gap-2 p-2.5 rounded-xl bg-[#100e0b] border border-[#d4af37]/15 mt-1 text-xs">
+                  <div>
+                    <span class="text-[10px] text-[#a89f91] block">Solenidades</span>
+                    <strong class="text-[#f2ca50] font-mono">${eventsCount} cultos</strong>
+                  </div>
+                  <div>
+                    <span class="text-[10px] text-[#a89f91] block">Acervo Local</span>
+                    <strong class="text-emerald-300 font-mono">${patCount} tombos</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-3 mt-3 border-t border-[#d4af37]/15 flex items-center justify-between">
+                <button onclick="EventController.filterByCongregation('${c.id}'); Router.navigate('agenda');" class="text-xs text-[#f2ca50] hover:underline flex items-center gap-1 font-semibold">
+                  <span>Ver Agenda</span>
+                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      },
+
+      openCreateModal() {
+        const nome = prompt('Nome da Nova Congregação ou Filial:');
+        if (!nome || !nome.trim()) return;
+        const responsavel = prompt('Nome do Dirigente Responsável:') || 'Cooperador';
+
+        const newCong = {
+          id: 'cong-' + Date.now(),
+          nome: nome.trim(),
+          responsavel: responsavel.trim(),
+          ativa: true
+        };
+        AppState.congregations.push(newCong);
+        AppState.saveStorage();
+        EventController.populateCongregationsSelect();
+        PatrimonioController.populateSelects();
+        this.render();
+        Utils.toast(`Congregação "${nome}" adicionada com sucesso!`);
+      }
+    };
+
+    /**
+     * CONTROLADOR DE RELATÓRIOS OFICIAIS A4 (LIVRO DE TOMBO / ATA DE CULTOS)
+     */
+    const ReportController = {
+      docType: 'patrimonio', // 'patrimonio' ou 'agenda'
+      orientation: 'landscape', // 'landscape' (297mm) ou 'portrait' (210mm)
+
+      init() {
+        this.populateSelects();
+        this.updatePreview();
+      },
+
+      populateSelects() {
+        const selSede = document.getElementById('report-filter-sede');
+        if (!selSede) return;
+
+        let opts = '<option value="ALL">Todas as Congregações (Inventário Geral)</option>';
+        AppState.congregations.forEach(c => {
+          opts += `<option value="${c.id}">${c.nome}</option>`;
+        });
+        selSede.innerHTML = opts;
+      },
+
+      setDocType(type) {
+        this.docType = type;
+        const btnPat = document.getElementById('btn-doctype-patrimonio');
+        const btnAg = document.getElementById('btn-doctype-agenda');
+
+        if (type === 'patrimonio') {
+          btnPat.className = 'py-2.5 px-3 rounded-xl bg-[#2c2722] text-[#f2ca50] border border-[#d4af37]/40 font-bold text-xs flex items-center justify-center gap-2';
+          btnAg.className = 'py-2.5 px-3 rounded-xl bg-[#1a1714] text-[#a89f91] border border-[#d4af37]/15 text-xs flex items-center justify-center gap-2 hover:text-[#e9e1dc]';
+        } else {
+          btnAg.className = 'py-2.5 px-3 rounded-xl bg-[#2c2722] text-[#f2ca50] border border-[#d4af37]/40 font-bold text-xs flex items-center justify-center gap-2';
+          btnPat.className = 'py-2.5 px-3 rounded-xl bg-[#1a1714] text-[#a89f91] border border-[#d4af37]/15 text-xs flex items-center justify-center gap-2 hover:text-[#e9e1dc]';
+        }
+
+        this.updatePreview();
+      },
+
+      setOrientation(orient) {
+        this.orientation = orient;
+        const btnLand = document.getElementById('btn-orient-landscape');
+        const btnPort = document.getElementById('btn-orient-portrait');
+        const sheet = document.getElementById('print-area-wrapper');
+        const styleEl = document.getElementById('dynamic-page-orientation');
+
+        if (orient === 'landscape') {
+          btnLand.className = 'py-2 px-3 rounded-lg bg-[#2c2722] text-[#f2ca50] border border-[#d4af37]/40 text-xs font-semibold flex items-center justify-center gap-1.5';
+          btnPort.className = 'py-2 px-3 rounded-lg bg-[#1a1714] text-[#a89f91] border border-[#d4af37]/15 text-xs flex items-center justify-center gap-1.5 hover:text-[#e9e1dc]';
+          if (sheet) {
+            sheet.classList.remove('sheet-a4-portrait');
+            sheet.classList.add('sheet-a4-landscape');
+          }
+          if (styleEl) styleEl.textContent = '@page { size: A4 landscape; margin: 8mm 10mm 10mm 10mm; }';
+        } else {
+          btnPort.className = 'py-2 px-3 rounded-lg bg-[#2c2722] text-[#f2ca50] border border-[#d4af37]/40 text-xs font-semibold flex items-center justify-center gap-1.5';
+          btnLand.className = 'py-2 px-3 rounded-lg bg-[#1a1714] text-[#a89f91] border border-[#d4af37]/15 text-xs flex items-center justify-center gap-1.5 hover:text-[#e9e1dc]';
+          if (sheet) {
+            sheet.classList.remove('sheet-a4-landscape');
+            sheet.classList.add('sheet-a4-portrait');
+          }
+          if (styleEl) styleEl.textContent = '@page { size: A4 portrait; margin: 8mm 10mm 10mm 10mm; }';
+        }
+
+        const label = document.getElementById('report-sheet-orientation-label');
+        if (label) label.textContent = orient === 'landscape' ? 'Paisagem (297mm)' : 'Retrato (210mm)';
+      },
+
+      updatePreview() {
+        const sede = document.getElementById('report-filter-sede')?.value || 'ALL';
+        const showFotos = document.getElementById('report-opt-fotos')?.checked ?? true;
+        const showChancelas = document.getElementById('report-opt-chancelas')?.checked ?? true;
+
+        const titleEl = document.getElementById('report-sheet-title');
+        const subtitleEl = document.getElementById('report-sheet-subtitle');
+        const sedeLabel = document.getElementById('report-sheet-sede-label');
+        const signatures = document.getElementById('report-sheet-signatures');
+        const thead = document.getElementById('report-table-head');
+        const tbody = document.getElementById('report-table-body');
+
+        if (signatures) {
+          if (showChancelas) signatures.classList.remove('hidden');
+          else signatures.classList.add('hidden');
+        }
+
+        const congObj = AppState.congregations.find(c => c.id === sede);
+        if (sedeLabel) sedeLabel.textContent = congObj ? congObj.nome : 'Geral (Todas as Sedes)';
+
+        if (this.docType === 'patrimonio') {
+          // Relatório de Patrimônio (Título estritamente 'Patrimônio' conforme requerido)
+          if (titleEl) titleEl.textContent = 'PATRIMÔNIO';
+          if (subtitleEl) subtitleEl.textContent = 'Rol Notarial de Custódias, Vasos Sagrados, Mobiliário e Alfaias';
+
+          let list = [...AppState.patrimonio];
+          if (sede !== 'ALL') list = list.filter(p => p.congregaçãoId === sede);
+
+          thead.innerHTML = `
+            <tr class="border-b border-[#d4af37]/30 text-[#f2ca50] font-serif uppercase tracking-wider text-[10px]">
+              ${showFotos ? '<th class="py-2 px-2 text-center w-12">Foto</th>' : ''}
+              <th class="py-2 px-2 w-14">Tombo</th>
+              <th class="py-2 px-2">Alfaia / Descrição Canônica</th>
+              <th class="py-2 px-2">Congregação / Sede</th>
+              <th class="py-2 px-2">Departamento</th>
+              <th class="py-2 px-2 text-center w-12">Ano</th>
+              <th class="py-2 px-2 text-center w-12">Qtd</th>
+              <th class="py-2 px-2">Guardião Responsável</th>
+            </tr>
+          `;
+
+          if (list.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="8" class="py-4 text-center text-xs text-[#a89f91]">Nenhum bem de patrimônio para emissão.</td></tr>`;
+          } else {
+            tbody.innerHTML = list.map(item => `
+              <tr class="text-[11px] leading-tight">
+                ${showFotos ? `
+                  <td class="py-1.5 px-2 text-center">
+                    <img src="${item.foto || 'icon-192.png'}" class="w-7 h-7 rounded object-cover inline-block border border-[#d4af37]/30" alt="" onerror="this.onerror=null; this.src='icon-192.png';" />
+                  </td>
+                ` : ''}
+                <td class="py-1.5 px-2 font-mono font-bold text-[#f2ca50] whitespace-nowrap">${item.tombo || '#000'}</td>
+                <td class="py-1.5 px-2 font-bold text-[#f4ecd8]">${item.nome}</td>
+                <td class="py-1.5 px-2 text-[#e4c285] whitespace-nowrap">${item.congregaçãoNome || 'Central'}</td>
+                <td class="py-1.5 px-2 text-[#a89f91]">${item.depto || 'Altar'}</td>
+                <td class="py-1.5 px-2 text-center font-mono text-[#e9e1dc]">${item.ano || '---'}</td>
+                <td class="py-1.5 px-2 text-center font-bold text-[#f2ca50] font-mono">${item.qtd || 1}</td>
+                <td class="py-1.5 px-2 text-[#a89f91] text-[10px]">${item.guardiao || 'Zelador'}</td>
+              </tr>
+            `).join('');
+          }
+
+        } else {
+          // Relatório da Agenda de Cultos
+          if (titleEl) titleEl.textContent = 'ATA GERAL DE SOLENIDADES & CULTOS';
+          if (subtitleEl) subtitleEl.textContent = 'Ordo Liturgicus Diocesano • Calendário Cronológico de Atas';
+
+          let list = [...AppState.events].sort((a, b) => (a.dataInicio || '').localeCompare(b.dataInicio || ''));
+          if (sede !== 'ALL') list = list.filter(e => e.congregaçãoId === sede);
+
+          thead.innerHTML = `
+            <tr class="border-b border-[#d4af37]/30 text-[#f2ca50] font-serif uppercase tracking-wider text-[10px]">
+              <th class="py-2 px-2 w-24">Data</th>
+              <th class="py-2 px-2 w-14">Hora</th>
+              <th class="py-2 px-2">Solenidade / Culto Eclesiástico</th>
+              <th class="py-2 px-2">Congregação</th>
+              <th class="py-2 px-2">Categoria</th>
+              <th class="py-2 px-2">Pregador Titular</th>
+            </tr>
+          `;
+
+          if (list.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center text-xs text-[#a89f91]">Nenhum culto agendado para emissão.</td></tr>`;
+          } else {
+            tbody.innerHTML = list.map(e => `
+              <tr class="text-[11px] leading-tight">
+                <td class="py-1.5 px-2 font-mono font-bold text-[#f2ca50] whitespace-nowrap">${Utils.formatDateBr(e.dataInicio)}</td>
+                <td class="py-1.5 px-2 font-mono text-[#a89f91]">${e.horario || '19:30'}</td>
+                <td class="py-1.5 px-2 font-bold text-[#f4ecd8]">${e.titulo}</td>
+                <td class="py-1.5 px-2 text-[#e4c285] whitespace-nowrap">${e.congregaçãoNome || 'Central'}</td>
+                <td class="py-1.5 px-2 text-[#a89f91]">${e.categoria || 'Culto'}</td>
+                <td class="py-1.5 px-2 text-[#e9e1dc]">${e.pregador || 'Pr. Titular'}</td>
+              </tr>
+            `).join('');
+          }
+        }
+      },
+
+      print() {
+        window.print();
+      }
+    };
+
+    /**
+     * CENTRAL DE BACKUP & SINCRONIZAÇÃO ENTRE APARELHOS
+     */
+    const BackupService = {
+      getPayload() {
+        return {
+          app: 'Agenda_Oficial_Eclesiastica',
+          versao: '1.1.5',
+          ambiente: 'Desktop_PC',
+          dataExportacao: new Date().toISOString(),
+          dataExportacaoFormatada: new Date().toLocaleString('pt-BR'),
+          resumo: {
+            totalEventos: AppState.events.length,
+            totalCongregacoes: AppState.congregations.length,
+            totalPatrimonio: AppState.patrimonio.length
+          },
+          eventos: AppState.events,
+          congregacoes: AppState.congregations,
+          patrimonio: AppState.patrimonio,
+          tema: AppState.theme
+        };
+      },
+
+      export() {
+        const data = this.getPayload();
+        const jsonStr = JSON.stringify(data, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const dateStr = new Date().toISOString().slice(0, 10);
+        a.href = url;
+        a.download = `agenda_oficial_backup_completo_${dateStr}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        Utils.toast('Arquivo de backup completo gerado com sucesso!');
+      },
+
+      importFromFile(input) {
+        if (!input.files || !input.files[0]) return;
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.restore(e.target.result);
+          input.value = '';
+        };
+        reader.readAsText(file);
+      },
+
+      copyToClipboard() {
+        const data = this.getPayload();
+        const jsonStr = JSON.stringify(data, null, 2);
+        navigator.clipboard.writeText(jsonStr).then(() => {
+          Utils.toast('Código de backup copiado para a área de transferência!');
+        }).catch(() => {
+          Utils.toast('Erro ao copiar código. Selecione e copie manualmente.');
+        });
+      },
+
+      togglePasteBox() {
+        const box = document.getElementById('paste-backup-container');
+        if (box) box.classList.toggle('hidden');
+      },
+
+      processPastedText() {
+        const text = document.getElementById('paste-backup-text')?.value;
+        if (!text || !text.trim()) {
+          alert('Por favor, cole o código JSON do backup na caixa.');
+          return;
+        }
+        this.restore(text.trim());
+      },
+
+      restore(jsonString) {
+        try {
+          const parsed = JSON.parse(jsonString);
+          if (!parsed.eventos && !parsed.patrimonio && !parsed.congregacoes) {
+            alert('Arquivo inválido. Formato de backup da Agenda Oficial não reconhecido.');
+            return;
+          }
+
+          if (parsed.eventos && Array.isArray(parsed.eventos)) AppState.events = parsed.eventos;
+          if (parsed.congregacoes && Array.isArray(parsed.congregacoes)) AppState.congregations = parsed.congregacoes;
+          if (parsed.patrimonio && Array.isArray(parsed.patrimonio)) AppState.patrimonio = parsed.patrimonio;
+          if (parsed.tema) AppState.theme = parsed.tema;
+
+          AppState.saveStorage();
+          AppState.applyTheme(AppState.theme);
+
+          EventController.populateCongregationsSelect();
+          PatrimonioController.populateSelects();
+          CongregationController.render();
+          ReportController.populateSelects();
+          ReportController.updatePreview();
+          EventController.render();
+          PatrimonioController.render();
+
+          Utils.toast(`Restauração concluída! ${AppState.events.length} cultos, ${AppState.patrimonio.length} bens restaurados.`);
+          
+          const box = document.getElementById('paste-backup-container');
+          if (box) box.classList.add('hidden');
+        } catch (err) {
+          alert('Erro ao processar dados de backup: ' + err.message);
+        }
+      }
+    };
+
+    /**
+     * CONTROLADOR DE TEMAS & PALETAS RETRÁTEIS
+     */
+    const ThemeController = {
+      togglePaletteMenu() {
+        const dropdown = document.getElementById('palette-dropdown');
+        const chevron = document.getElementById('palette-chevron');
+        if (dropdown) dropdown.classList.toggle('hidden');
+        if (chevron) {
+          chevron.textContent = dropdown.classList.contains('hidden') ? 'expand_more' : 'expand_less';
+        }
+      },
+
+      select(themeId) {
+        AppState.applyTheme(themeId);
+        AppState.saveStorage();
+        Utils.toast(`Paleta ativada: ${themeId}`);
+      }
+    };
+
+    /**
+     * CONTROLADOR DE BUSCA GLOBAL
+     */
+    const SearchController = {
+      handleGlobal(query) {
+        query = (query || '').toLowerCase().trim();
+        if (!query) {
+          EventController.render();
+          PatrimonioController.render();
+          return;
+        }
+
+        // Se estiver na view de agenda, filtra eventos
+        if (Router.currentView === 'agenda') {
+          const filtered = AppState.events.filter(e => 
+            (e.titulo || '').toLowerCase().includes(query) ||
+            (e.congregaçãoNome || '').toLowerCase().includes(query) ||
+            (e.pregador || '').toLowerCase().includes(query) ||
+            (e.descricao || '').toLowerCase().includes(query)
+          );
+          EventController.renderCalendarMatrix(AppState.currentMonth.getFullYear(), AppState.currentMonth.getMonth());
+          const tbody = document.getElementById('agenda-table-body');
+          if (tbody) {
+            tbody.innerHTML = filtered.map(e => `
+              <tr class="hover:bg-[#221f1c]/60 cursor-pointer" onclick="EventController.selectEvent('${e.id}')">
+                <td class="py-2 px-3 font-mono text-[#f2ca50]">${e.dataInicio}</td>
+                <td class="py-2 px-3 font-bold text-[#e9e1dc]">${e.titulo}</td>
+                <td class="py-2 px-3 text-[#e4c285]">${e.congregaçãoNome || 'Central'}</td>
+                <td class="py-2 px-3 text-[#a89f91]">${e.pregador || 'Pr. Titular'}</td>
+                <td class="py-2 px-3 text-center font-mono text-xs">${Utils.calculateDaysDiff(e.dataInicio)}</td>
+                <td class="py-2 px-3 text-right">
+                  <button onclick="EventController.editEvent('${e.id}')" class="p-1 text-[#f2ca50]"><span class="material-symbols-outlined text-sm">edit</span></button>
+                </td>
+              </tr>
+            `).join('');
+          }
+        }
+
+        // Se estiver no patrimônio, filtra acervo
+        if (Router.currentView === 'patrimonio') {
+          const filtered = AppState.patrimonio.filter(p =>
+            (p.nome || '').toLowerCase().includes(query) ||
+            (p.tombo || '').toLowerCase().includes(query) ||
+            (p.congregaçãoNome || '').toLowerCase().includes(query) ||
+            (p.depto || '').toLowerCase().includes(query) ||
+            (p.descricao || '').toLowerCase().includes(query)
+          );
+          PatrimonioController.renderGrid(filtered);
+          PatrimonioController.renderTable(filtered);
+        }
+      }
+    };
+
+    /**
+     * UTILITÁRIOS
+     */
+    const Utils = {
+      toast(message) {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = 'px-4 py-2.5 rounded-xl bg-[#221f1c] border border-[#d4af37]/40 text-[#f2ca50] text-xs font-semibold shadow-2xl flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0 pointer-events-auto';
+        toast.innerHTML = `
+          <span class="material-symbols-outlined text-base">info</span>
+          <span>${message}</span>
+        `;
+        container.appendChild(toast);
+
+        setTimeout(() => {
+          toast.classList.remove('translate-y-2', 'opacity-0');
+        }, 10);
+
+        setTimeout(() => {
+          toast.classList.add('opacity-0', 'translate-y-2');
+          setTimeout(() => toast.remove(), 300);
+        }, 3200);
+      },
+
+      formatDateBr(dateStr) {
+        if (!dateStr) return '';
+        const parts = dateStr.split('-');
+        if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        return dateStr;
+      },
+
+      calculateDaysDiff(dateStr) {
+        if (!dateStr) return 'Hoje';
+        const target = new Date(dateStr + 'T00:00:00');
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const diffDays = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+        if (diffDays === 0) return 'Hoje';
+        if (diffDays === 1) return 'Amanhã';
+        if (diffDays === -1) return 'Ontem';
+        if (diffDays > 0) return `Em ${diffDays} dias`;
+        return `Há ${Math.abs(diffDays)} dias`;
+      }
+    };
+
+    // Inicialização da Aplicação ao Carregar DOM
+    document.addEventListener('DOMContentLoaded', () => {
+      AppState.init();
+
+      if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('Service Worker Desktop ativo.'))
+          .catch(err => console.log('SW ignorado:', err));
+      }
+    });
+  </script>
+</body>
+</html>

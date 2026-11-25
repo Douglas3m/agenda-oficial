@@ -12,8 +12,10 @@
 
 O aplicativo foi empacotado com máxima eficiência, pesando apenas **3.05 MB**, 100% offline-ready e assinado com esquemas v1, v2 e v3 para compatibilidade total do Android 5.0 (Lollipop) ao Android 14 (API 34).
 
-* 📦 **Download Direto do APK:** [`releases/Agenda-v1.1.5.apk`](releases/Agenda-v1.1.5.apk) ou na raiz [`Agenda-v1.1.5.apk`](Agenda-v1.1.5.apk)
-* 🔐 **Assinatura:** Assinado com chave SHA-256 e verificado pelo `apksigner`.
+* 📦 **Download Direto do APK Oficial:** [Agenda-v1.1.5.apk (GitHub Release)](https://github.com/Douglas3m/agenda-oficial/releases/download/v1.1.5/Agenda-v1.1.5.apk)
+* 🏷️ **Página Oficial de Release no GitHub:** [Release Agenda vs 1.1.5](https://github.com/Douglas3m/agenda-oficial/releases/tag/v1.1.5)
+* 💾 **Cópia Local no Repositório:** [`releases/Agenda-v1.1.5.apk`](releases/Agenda-v1.1.5.apk)
+* 🔐 **Assinatura Digital:** Chave SHA-256 e verificado pelo `apksigner` (v1, v2 e v3).
 * ⚡ **Performance:** WebView acelerada por hardware com interceptação local de assets de latência zero (`https://agenda.local`).
 
 ---

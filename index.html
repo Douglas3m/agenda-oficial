@@ -4643,26 +4643,7 @@
               </div>
             </div>
             <script>window.onload = function() { window.print(); }<\/script>
-            <!-- ========================================== -->
-  <!-- MODAL: CENTRAL DE BACKUP E TRANSFERÊNCIA   -->
-  
-  <!-- Suporte Nativo a Impressão e Geração de PDF via Android PrintManager -->
-  <script>
-    (function() {
-      const _origWindowPrint = window.print;
-      window.print = function() {
-        if (window.AndroidBridge && typeof window.AndroidBridge.printDocument === 'function') {
-          const cleanTitle = (document.title || 'Relatorio_Agenda_Oficial_A4')
-            .replace(/[^a-zA-Z0-9_\-]/g, '_');
-          window.AndroidBridge.printDocument(cleanTitle);
-        } else {
-          _origWindowPrint.call(window);
-        }
-      };
-    })();
-  </script>
-
-</body>
+          </body>
           </html>
         `);
         printWin.document.close();

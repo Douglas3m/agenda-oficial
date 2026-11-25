@@ -16,7 +16,7 @@ APKSIGNER = os.path.join(BUILD_TOOLS_DIR, "apksigner.bat")
 ROOT_DIR = r"D:\agenda_app"
 BUILD_DIR = os.path.join(ROOT_DIR, "android_build")
 OUTPUT_DIR = os.path.join(ROOT_DIR, "releases")
-APK_NAME = "Agenda-v1.1.6.apk"
+APK_NAME = "Agenda-v1.1.7.apk"
 KEYSTORE = os.path.join(ROOT_DIR, "agenda_release.keystore")
 KEYSTORE_PASS = "agenda2026"
 KEY_ALIAS = "agenda_key"
@@ -83,8 +83,8 @@ def create_manifest():
     manifest_content = """<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.agendaoficial.app"
-    android:versionCode="10106"
-    android:versionName="1.1.6">
+    android:versionCode="10107"
+    android:versionName="1.1.7">
 
     <uses-sdk
         android:minSdkVersion="21"
@@ -103,6 +103,21 @@ def create_manifest():
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+    <!-- Package Visibility Queries para Android 11+ (Câmera e Galeria) -->
+    <queries>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.GET_CONTENT" />
+            <data android:mimeType="*/*" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.PICK" />
+            <data android:mimeType="image/*" />
+        </intent>
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -124,17 +139,6 @@ def create_manifest():
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- Provider Seguro para Compartilhamento de Fotos da Câmera -->
-        <provider
-            android:name=".AppFileProvider"
-            android:authorities="br.com.agendaoficial.app.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
 
     </application>
 </manifest>
@@ -162,106 +166,8 @@ def create_manifest():
     with open(os.path.join(BUILD_DIR, "res", "values", "styles.xml"), "w", encoding="utf-8") as f:
         f.write(styles_content)
 
-    file_paths = """<?xml version="1.0" encoding="utf-8"?>
-<paths>
-    <external-files-path name="my_images" path="." />
-    <cache-path name="my_cache" path="." />
-</paths>
-"""
-    with open(os.path.join(BUILD_DIR, "res", "xml", "file_paths.xml"), "w", encoding="utf-8") as f:
-        f.write(file_paths)
-
 def create_java_source():
-    # 1. AppFileProvider.java (ContentProvider nativo sem dependência externa)
-    file_provider_code = """package br.com.agendaoficial.app;
-
-import android.content.ContentProvider;
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.MatrixCursor;
-import android.net.Uri;
-import android.os.ParcelFileDescriptor;
-import android.provider.OpenableColumns;
-import java.io.File;
-import java.io.FileNotFoundException;
-
-public class AppFileProvider extends ContentProvider {
-    public static final String AUTHORITY = "br.com.agendaoficial.app.fileprovider";
-
-    public static Uri getUriForFile(File file) {
-        return Uri.parse("content://" + AUTHORITY + "/" + file.getName());
-    }
-
-    @Override
-    public boolean onCreate() {
-        return true;
-    }
-
-    @Override
-    public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
-        File cacheDir = getContext() != null ? getContext().getCacheDir() : null;
-        if (cacheDir == null) {
-            throw new FileNotFoundException("Diretório de cache indisponível");
-        }
-        File file = new File(cacheDir, uri.getLastPathSegment());
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (Exception e) {
-                throw new FileNotFoundException("Erro ao criar arquivo: " + e.getMessage());
-            }
-        }
-        int modeFlag = ParcelFileDescriptor.MODE_READ_WRITE;
-        if ("r".equals(mode)) {
-            modeFlag = ParcelFileDescriptor.MODE_READ_ONLY;
-        }
-        return ParcelFileDescriptor.open(file, modeFlag);
-    }
-
-    @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        File cacheDir = getContext() != null ? getContext().getCacheDir() : null;
-        if (cacheDir == null) return null;
-        File file = new File(cacheDir, uri.getLastPathSegment());
-        MatrixCursor cursor = new MatrixCursor(new String[]{OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE});
-        cursor.addRow(new Object[]{file.getName(), file.length()});
-        return cursor;
-    }
-
-    @Override
-    public String getType(Uri uri) {
-        String name = uri.getLastPathSegment();
-        if (name != null && name.toLowerCase().endsWith(".png")) {
-            return "image/png";
-        }
-        if (name != null && name.toLowerCase().endsWith(".pdf")) {
-            return "application/pdf";
-        }
-        return "image/jpeg";
-    }
-
-    @Override
-    public Uri insert(Uri uri, ContentValues values) { return null; }
-
-    @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        File cacheDir = getContext() != null ? getContext().getCacheDir() : null;
-        if (cacheDir == null) return 0;
-        File file = new File(cacheDir, uri.getLastPathSegment());
-        if (file.exists()) {
-            return file.delete() ? 1 : 0;
-        }
-        return 0;
-    }
-
-    @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) { return 0; }
-}
-"""
-    with open(os.path.join(BUILD_DIR, "src", "br", "com", "agendaoficial", "app", "AppFileProvider.java"), "w", encoding="utf-8") as f:
-        f.write(file_provider_code)
-
-    # 2. MainActivity.java (WebView com Câmera, Seletor Chooser e PrintManager A4 / PDF)
+    # MainActivity.java ultra-robusto (Sem providers externos, compatível com 100% dos aparelhos)
     java_content = """package br.com.agendaoficial.app;
 
 import android.app.Activity;
@@ -282,12 +188,14 @@ import android.webkit.JavascriptInterface;
 import android.net.Uri;
 import android.content.Intent;
 import android.content.Context;
+import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.provider.MediaStore;
 import android.print.PrintManager;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintAttributes;
 import android.graphics.Color;
+import android.graphics.Bitmap;
 import android.widget.Toast;
 import android.Manifest;
 import java.io.InputStream;
@@ -323,12 +231,14 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Status bar & Navigation bar styling
-        Window window = getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(Color.parseColor("#1a1613"));
-        window.setNavigationBarColor(Color.parseColor("#12100e"));
+        // Estilização da Barra de Status e Navegação
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.parseColor("#1a1613"));
+            window.setNavigationBarColor(Color.parseColor("#12100e"));
+        }
 
         mWebView = new WebView(this);
         mWebView.setBackgroundColor(Color.parseColor("#12100e"));
@@ -371,19 +281,24 @@ public class MainActivity extends Activity {
                     isCaptureExplicit = true;
                 }
 
-                // 1. Prepara Intent da Câmera Nativa do Android
+                // 1. Prepara Intent da Câmera Nativa do Android via MediaStore Oficial
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 try {
-                    File photoFile = new File(getCacheDir(), "foto_patrimonio_" + System.currentTimeMillis() + ".jpg");
-                    mCameraPhotoUri = AppFileProvider.getUriForFile(photoFile);
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCameraPhotoUri);
-                    takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    ContentValues values = new ContentValues();
+                    values.put(MediaStore.Images.Media.TITLE, "Foto_Tombo_" + System.currentTimeMillis());
+                    values.put(MediaStore.Images.Media.DESCRIPTION, "Foto capturada pela Agenda Oficial");
+                    values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+                    mCameraPhotoUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                    if (mCameraPhotoUri != null) {
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCameraPhotoUri);
+                        takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    }
                 } catch (Exception e) {
                     mCameraPhotoUri = null;
                 }
 
-                // Se capture="camera" foi especificado no HTML, abre direto a câmera
-                if (isCaptureExplicit && mCameraPhotoUri != null && takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                // Se capture="camera" foi especificado no HTML, tenta abrir direto a câmera
+                if (isCaptureExplicit) {
                     try {
                         startActivityForResult(takePictureIntent, FILECHOOSER_RESULTCODE);
                         return true;
@@ -402,11 +317,8 @@ public class MainActivity extends Activity {
                 // 3. Monta o Seletor Unificado (Tirar Foto com a Câmera OU Escolher da Galeria)
                 Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
                 chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
-                chooserIntent.putExtra(Intent.EXTRA_TITLE, "Capturar com Câmera ou Selecionar Foto");
-
-                if (mCameraPhotoUri != null && takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePictureIntent});
-                }
+                chooserIntent.putExtra(Intent.EXTRA_TITLE, "Tirar Foto ou Escolher da Galeria");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePictureIntent});
 
                 try {
                     startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE);
@@ -429,7 +341,21 @@ public class MainActivity extends Activity {
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                Uri uri = request.getUrl();
+                if (request != null && request.getUrl() != null) {
+                    return handleExternalSchemes(request.getUrl());
+                }
+                return false;
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url != null) {
+                    return handleExternalSchemes(Uri.parse(url));
+                }
+                return false;
+            }
+
+            private boolean handleExternalSchemes(Uri uri) {
                 String scheme = uri.getScheme();
                 if ("tel".equals(scheme) || "mailto".equals(scheme) || "whatsapp".equals(scheme)) {
                     try {
@@ -445,7 +371,22 @@ public class MainActivity extends Activity {
 
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-                Uri uri = request.getUrl();
+                if (request != null && request.getUrl() != null) {
+                    return interceptAsset(request.getUrl());
+                }
+                return super.shouldInterceptRequest(view, request);
+            }
+
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+                if (url != null) {
+                    return interceptAsset(Uri.parse(url));
+                }
+                return super.shouldInterceptRequest(view, url);
+            }
+
+            private WebResourceResponse interceptAsset(Uri uri) {
+                if (uri == null) return null;
                 String host = uri.getHost();
                 if ("agenda.local".equals(host) || "localhost".equals(host)) {
                     String path = uri.getPath();
@@ -469,10 +410,10 @@ public class MainActivity extends Activity {
                         headers.put("Cache-Control", "no-cache");
                         return new WebResourceResponse(mimeType, "UTF-8", 200, "OK", headers, is);
                     } catch (Exception e) {
-                        // fallback to default
+                        // fallback
                     }
                 }
-                return super.shouldInterceptRequest(view, request);
+                return null;
             }
         });
 
@@ -506,25 +447,26 @@ public class MainActivity extends Activity {
             if (mFilePathCallback != null) {
                 Uri[] results = null;
                 if (resultCode == Activity.RESULT_OK) {
-                    // 1. Caso a foto tenha sido tirada pela CÂMERA
-                    if (data == null || data.getData() == null) {
-                        if (mCameraPhotoUri != null) {
-                            File photoFile = new File(getCacheDir(), mCameraPhotoUri.getLastPathSegment());
-                            if (photoFile.exists() && photoFile.length() > 0) {
-                                results = new Uri[]{mCameraPhotoUri};
-                            }
+                    if (data != null && data.getData() != null) {
+                        results = new Uri[]{data.getData()};
+                    } else if (data != null && data.getClipData() != null) {
+                        int count = data.getClipData().getItemCount();
+                        results = new Uri[count];
+                        for (int i = 0; i < count; i++) {
+                            results[i] = data.getClipData().getItemAt(i).getUri();
                         }
-                    } else {
-                        // 2. Caso a foto venha da GALERIA ou gerenciador de arquivos
-                        if (data.getData() != null) {
-                            results = new Uri[]{data.getData()};
-                        } else if (data.getClipData() != null) {
-                            int count = data.getClipData().getItemCount();
-                            results = new Uri[count];
-                            for (int i = 0; i < count; i++) {
-                                results[i] = data.getClipData().getItemAt(i).getUri();
-                            }
-                        }
+                    } else if (mCameraPhotoUri != null) {
+                        results = new Uri[]{mCameraPhotoUri};
+                    } else if (data != null && data.getExtras() != null && data.getExtras().get("data") != null) {
+                        try {
+                            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                            File cacheFile = new File(getCacheDir(), "foto_capturada_" + System.currentTimeMillis() + ".jpg");
+                            FileOutputStream fos = new FileOutputStream(cacheFile);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+                            fos.flush();
+                            fos.close();
+                            results = new Uri[]{Uri.fromFile(cacheFile)};
+                        } catch (Exception ex) {}
                     }
                 }
                 mFilePathCallback.onReceiveValue(results);
@@ -570,7 +512,7 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public String getAppVersion() {
-            return "1.1.6";
+            return "1.1.7";
         }
 
         @JavascriptInterface
@@ -589,19 +531,23 @@ public class MainActivity extends Activity {
                 @Override
                 public void run() {
                     try {
-                        PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
-                        String jobName = (documentName != null && !documentName.trim().isEmpty())
-                                ? documentName.trim()
-                                : "Relatorio_Agenda_Oficial_A4";
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                            PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
+                            String jobName = (documentName != null && !documentName.trim().isEmpty())
+                                    ? documentName.trim()
+                                    : "Relatorio_Agenda_Oficial_A4";
 
-                        PrintDocumentAdapter printAdapter = mWebView.createPrintDocumentAdapter(jobName);
-                        PrintAttributes.Builder builder = new PrintAttributes.Builder();
-                        builder.setMediaSize(PrintAttributes.MediaSize.ISO_A4);
-                        builder.setColorMode(PrintAttributes.COLOR_MODE_COLOR);
+                            PrintDocumentAdapter printAdapter = mWebView.createPrintDocumentAdapter(jobName);
+                            PrintAttributes.Builder builder = new PrintAttributes.Builder();
+                            builder.setMediaSize(PrintAttributes.MediaSize.ISO_A4);
+                            builder.setColorMode(PrintAttributes.COLOR_MODE_COLOR);
 
-                        printManager.print(jobName, printAdapter, builder.build());
+                            printManager.print(jobName, printAdapter, builder.build());
+                        } else {
+                            Toast.makeText(MainActivity.this, "Impressão requer Android 4.4+", Toast.LENGTH_SHORT).show();
+                        }
                     } catch (Exception e) {
-                        Toast.makeText(MainActivity.this, "Erro ao abrir spooler de impressão/PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Erro ao abrir impressão/PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -738,7 +684,7 @@ def build_apk():
     print(f"Caminho: {final_apk}")
     print(f"Cópia Raiz: {root_apk}")
     print(f"Tamanho: {size_mb:.2f} MB")
-    print(f"Versão: 1.1.6 (Agenda vs 1.1.6)")
+    print(f"Versão: 1.1.7 (Agenda vs 1.1.7)")
     print("="*60)
 
 if __name__ == "__main__":

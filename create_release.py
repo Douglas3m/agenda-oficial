@@ -14,9 +14,9 @@ def main():
         print("[ERRO] Token do GitHub nao encontrado.")
         sys.exit(1)
 
-    tag = 'v1.1.6'
-    release_name = 'Agenda vs 1.1.6'
-    notes_file = r'D:\agenda_app\RELEASE_NOTES_v1.1.6.md'
+    tag = 'v1.1.7'
+    release_name = 'Agenda vs 1.1.7'
+    notes_file = r'D:\agenda_app\RELEASE_NOTES_v1.1.7.md'
 
     with open(notes_file, 'r', encoding='utf-8') as f:
         release_notes = f.read()
